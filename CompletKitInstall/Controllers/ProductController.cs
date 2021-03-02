@@ -30,6 +30,24 @@ namespace CompletKitInstall.Controllers
             var rv = await _productRepo.GetById(id);
             return Ok(rv);
         }
+        [HttpPost]
+        public async Task<IActionResult> Add(Product product)
+        {
+            var rv = await _productRepo.Add(product);
+            return Ok(rv);
+        }
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Update(int id,Product product)
+        {
+            var rv = await _productRepo.Update(id,product);
+            return Ok(rv);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var rv = await _productRepo.RemoveById(id);
+            return Ok(rv);
+        }
 
     }
 }
