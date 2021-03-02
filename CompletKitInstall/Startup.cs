@@ -1,4 +1,6 @@
 using CompletKitInstall.Data;
+using CompletKitInstall.Models;
+using CompletKitInstall.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,13 +29,20 @@ namespace CompletKitInstall
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<CompletKitDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<CompletKitDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            //Added 
+            services.AddTransient<IRepository<Product>, ProductRepository>();
+
+            //Add MVC to be able to separate front end from backend
+            services.AddMvc();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
