@@ -61,6 +61,7 @@ namespace CompletKitInstall
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseDefaultFiles();
 
             app.UseRouting();
 

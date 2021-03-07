@@ -22,9 +22,9 @@ namespace CompletKitInstall.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-           var rv= await _productRepo.Get(asNoTracking:true);
-           return Ok(rv);
-           // return Ok();
+           //var rv= await _productRepo.Get(asNoTracking:true);
+           //return Ok(rv);
+            return Ok("You acted on product . get");
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
