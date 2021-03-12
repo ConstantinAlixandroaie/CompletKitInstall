@@ -1,6 +1,17 @@
 ﻿const uri = 'api/Product';
 let products = [];
 
+$(document).ready(function () {
+
+    $('header').load('/lib/Template/Header.html')
+
+})
+$(document).ready(function () {
+
+    $('footer').load('/lib/Template/Footer.html')
+
+})
+
 function getItems() {
     fetch(uri)
         .then(response => response.json())
