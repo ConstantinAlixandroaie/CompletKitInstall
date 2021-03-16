@@ -60,7 +60,7 @@ namespace CompletKitInstall
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseDefaultFiles();
+            //app.UseDefaultFiles();
             app.UseStaticFiles();
             
 
