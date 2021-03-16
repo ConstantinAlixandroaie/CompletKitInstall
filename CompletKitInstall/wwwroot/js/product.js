@@ -18,13 +18,17 @@ function getItems() {
         .then(data => _displayItems(data))
         .catch(error => console.error('Unable to get items.', error));
 }
-
+//Add has been Updated to work with the current API
 function addItem() {
     const addNameTextbox = document.getElementById('add-name');
+    const addDescriptionTextBox = document.getElementById('add-description')
+    const addImageUrlTextBox = document.getElementById('add-ImageUrl')
 
     const item = {
         isComplete: false,
-        name: addNameTextbox.value.trim()
+        name: addNameTextbox.value.trim(),
+        description: addDescriptionTextBox.value.trim(),
+        imageurl: addImageUrlTextBox.value.trim()
     };
 
     fetch(uri, {
