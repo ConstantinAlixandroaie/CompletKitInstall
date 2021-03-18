@@ -1,0 +1,14 @@
+﻿@page
+@model CompletKitInstall.Pages.ProductModel
+@{
+}
+
+@foreach (var item in Model.Products)
+{
+<div>
+    <img src="@item.ImageUrl" />
+    <a>@item.Name</a>
+    <a>@item.Description</a>
+</div>
+}60
+

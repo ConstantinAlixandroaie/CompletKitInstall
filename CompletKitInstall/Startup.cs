@@ -36,13 +36,14 @@ namespace CompletKitInstall
                 .AddEntityFrameworkStores<CompletKitDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            
             //Added 
             services.AddTransient<IRepository<Product>, ProductRepository>();
 
-            //Add MVC to be able to separate front end from backend
+            //Add MVC to be able to separate front end from backend**no longer needed
             services.AddMvc();
             services.AddControllers();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
