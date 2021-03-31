@@ -3,12 +3,23 @@
 @{
 }
 
-@foreach (var item in Model.Products)
-{
-<div>
-    <img src="@item.ImageUrl" />
-    <a>@item.Name</a>
-    <a>@item.Description</a>
-</div>
-}60
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model.Products)
+        {
+            <div class="col col-md-3">
+                <div class="card h-100">
+                    <img class="card-img-top" src="@item.ImageUrl" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
 
+    </div>
+</div>
