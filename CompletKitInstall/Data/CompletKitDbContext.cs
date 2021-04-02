@@ -10,9 +10,11 @@ namespace CompletKitInstall.Data
     public class CompletKitDbContext : IdentityDbContext
     {
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public CompletKitDbContext(DbContextOptions<CompletKitDbContext> options)
             : base(options)
         {
         }
     }
 }
+

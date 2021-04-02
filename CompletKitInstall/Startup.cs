@@ -38,8 +38,8 @@ namespace CompletKitInstall
             services.AddRazorPages();
             
             //Added 
-            services.AddTransient<IRepository<Product>, ProductRepository>();
-
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             //Add MVC to be able to separate front end from backend**no longer needed
             services.AddMvc();
             services.AddControllers();

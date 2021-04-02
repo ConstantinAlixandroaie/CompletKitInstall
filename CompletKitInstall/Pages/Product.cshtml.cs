@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using CompletKitInstall.Models;
+using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,33 +15,32 @@ namespace CompletKitInstall.Pages
 {
     public class ProductModel : PageModel
     {
-        private readonly IHttpClientFactory _clientFactory;
-        //public HttpClient Client { get; }
-        public List<ProductViewModel> Products { get; private set; }
+        private readonly IProductRepository _productRepo;
+        [BindProperty]
+        public List<Product> Products { get; private set; }
+        [BindProperty]
+        public Product Product { get; private set; }
         public bool GetProductsError { get; private set; }
-        public ProductModel(IHttpClientFactory clientFactory)
-        {
-            _clientFactory = clientFactory;
-        }
-        public async Task OnGetAsync()
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:5001/api/Product");
-            var Client = _clientFactory.CreateClient();
-            var response = await Client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                using var responseJson = await response.Content.ReadAsStreamAsync();
-                //Products = await Task.Run(() => .....);
-                Products = await JsonSerializer.DeserializeAsync<List<ProductViewModel>>(responseJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                //in loc de using
-                //responseJson.Dispose();
-            }
-            else
-            {
-                GetProductsError = true;
-                Products = null;
-            }
+        public bool GetProductError { get; private set; }
 
+        [BindProperty]
+        public bool IsById { get; set; }
+        public ProductModel(IProductRepository productRepo)
+        {
+            _productRepo = productRepo;
+        }
+        public async Task OnGetWithIdAsync(int id)
+        {
+            IsById = true;
+            Product =await _productRepo.GetById(id);
+        }
+        public async Task OnGetAsync(int? qid = null)
+        {
+            if (qid != null)
+            {
+                await OnGetWithIdAsync(qid.Value);
+            }
+            Products = (List<Product>)await _productRepo.Get();
         }
     }
 }

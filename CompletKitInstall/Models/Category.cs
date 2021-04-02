@@ -5,18 +5,19 @@ using System.Threading.Tasks;
 
 namespace CompletKitInstall.Models
 {
-    public class Product : IDbObject
+    public class Category:IDbObject
     {
-        public int Id { get ; set ; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ImageUrl { get; set; }
-        public Category Category { get; set; }
-        public int CategoryId { get; set; }
 
         public IDbObject MakeNew()
         {
-            return new Product { Name = Name,Description=Description,ImageUrl=ImageUrl, Category=Category,CategoryId=CategoryId };
+            return new Category 
+            { 
+                Name=Name,
+                Description=Description
+            };
         }
 
         public void UpdateFrom(IDbObject obj)
@@ -24,9 +25,6 @@ namespace CompletKitInstall.Models
             var q = obj as Product;
             Name = q.Name;
             Description = q.Description;
-            ImageUrl = q.ImageUrl;
-            Category = q.Category;
-            CategoryId = q.CategoryId;
         }
     }
 }

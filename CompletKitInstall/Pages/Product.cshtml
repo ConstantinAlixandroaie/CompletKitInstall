@@ -1,13 +1,15 @@
-﻿@page
+﻿@page "{qid?}"
 @model CompletKitInstall.Pages.ProductModel
 @{
 }
 
+@if (!Model.IsById)
+{
 <div class="container">
     <div class="row">
         @foreach (var item in Model.Products)
         {
-            <div class="col col-md-3">
+            <div class="col col-md-3  my-1">
                 <div class="card h-100">
                     <img class="card-img-top" src="@item.ImageUrl" alt="Card image cap">
                     <div class="card-body">
@@ -15,11 +17,22 @@
                         <p class="card-text">@item.Description</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn btn-primary">Details</a>
+                        <a href="/Product/@item.Id" class="btn btn-primary">Details</a>
                     </div>
                 </div>
             </div>
         }
-
     </div>
 </div>
+}
+else
+{ 
+    <div class="container">
+        <div class="row">
+            <h3>@Model.Product.Name</h3>
+            <img src="@Model.Product.ImageUrl" />
+            <p> @Model.Product.Description</p>
+        </div>
+    </div>
+
+}
