@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
-using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
