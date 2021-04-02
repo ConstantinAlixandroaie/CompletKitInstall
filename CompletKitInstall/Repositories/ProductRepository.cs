@@ -21,68 +21,108 @@ namespace CompletKitInstall.Repositories
 
         public override async Task<Product> Add(Product item)
         {
-            if (item == null)
-                return null;
-            if (item.ImageUrl == null)
-                return null;
-            if (item.Description == null)
-                return null;
-            var product = new Product
+            try
             {
-                Name = item.Name,
-                Description = item.Description,
-                ImageUrl = item.ImageUrl
-            };
-            _ctx.Products.Add(product);
-            await _ctx.SaveChangesAsync();
-            return product;
+                if (item == null)
+                    return null;
+                if (item.ImageUrl == null)
+                    return null;
+                if (item.Description == null)
+                    return null;
+                var product = new Product
+                {
+                    Name = item.Name,
+                    Description = item.Description,
+                    ImageUrl = item.ImageUrl
+                };
+                _ctx.Products.Add(product);
+                await _ctx.SaveChangesAsync();
+                return product;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         public override async Task<IEnumerable<Product>> Get(bool asNoTracking = false)
         {
-            var sourceCollection = _ctx.Products.AsQueryable();
-            if (asNoTracking)
-                sourceCollection = sourceCollection.AsNoTracking();
-            return await _ctx.Products.ToListAsync();
+            try
+            {
+                var sourceCollection = _ctx.Products.AsQueryable();
+                if (asNoTracking)
+                    sourceCollection = sourceCollection.AsNoTracking();
+                return await sourceCollection.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         public override async Task<Product> GetById(int id, bool asNoTracking = false)
         {
-            var sourceCollection = _ctx.Products.AsQueryable();
-            if (asNoTracking)
-                sourceCollection = sourceCollection.AsNoTracking();
-            var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
-            if (product == null)
-                return null;
-            return product;
+            try
+            {
+                var sourceCollection = _ctx.Products.AsQueryable();
+                if (asNoTracking)
+                    sourceCollection = sourceCollection.AsNoTracking();
+                var product = await sourceCollection.FirstOrDefaultAsync(x => x.Id == id);
+                if (product == null)
+                    return null;
+                return product;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         public override async Task<Product> RemoveById(int id)
         {
-            var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
-            if (product == null)
-                return null;
-            _ctx.Products.Remove(product);
-            await _ctx.SaveChangesAsync();
-            return product;
-                  
+            try
+            {
+                var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
+                if (product == null)
+                    return null;
+                _ctx.Products.Remove(product);
+                await _ctx.SaveChangesAsync();
+                return product;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
         public override async Task<bool> Update(int id, Product newData)
         {
-            var item = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
-            if (item == null)
-                return false;
-            if (newData.ImageUrl != null)
+            try
             {
-                item.ImageUrl = newData.ImageUrl;
+                var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
+                if (product == null)
+                    return false;
+                if (newData.ImageUrl != null)
+                {
+                    product.ImageUrl = newData.ImageUrl;
+                }
+                if (newData.Description != null)
+                {
+                    product.Description = newData.Description;
+                }
+                if (newData.Name != null)
+                {
+                    product.Name = newData.Name;
+                }
+                await _ctx.SaveChangesAsync();
+                return true;
             }
-            if (newData.Description != null)
+            catch (Exception ex)
             {
-                item.Description = newData.Description;
+
+                throw ex;
             }
-            if (newData.Name != null)
-            {
-                item.Name = newData.Name;
-            }
-            await _ctx.SaveChangesAsync();
-            return true;
 
         }
     }

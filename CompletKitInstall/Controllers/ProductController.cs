@@ -15,9 +15,10 @@ namespace CompletKitInstall.Controllers
     {
         private readonly ILogger<ProductController> _logger;
         private readonly IRepository<Product> _productRepo;
-        public ProductController(IRepository<Product> productRepo)
+        public ProductController(IRepository<Product> productRepo,ILogger<ProductController> logger)
         {
             _productRepo = productRepo;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<IActionResult> Get()

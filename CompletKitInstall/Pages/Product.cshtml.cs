@@ -28,18 +28,20 @@ namespace CompletKitInstall.Pages
         {
             _productRepo = productRepo;
         }
-        public async Task OnGetWithIdAsync(int id)
+        public async Task<IActionResult> OnGetWithIdAsync(int id)
         {
             IsById = true;
             Product =await _productRepo.GetById(id);
+            return Page();
         }
-        public async Task OnGetAsync(int? qid = null)
+        public async Task<IActionResult> OnGetAsync(int? qid = null)
         {
             if (qid != null)
             {
                 await OnGetWithIdAsync(qid.Value);
             }
             Products = (List<Product>)await _productRepo.Get();
+            return Page();
         }
     }
 }
