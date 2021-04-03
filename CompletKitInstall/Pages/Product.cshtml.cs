@@ -16,12 +16,9 @@ namespace CompletKitInstall.Pages
     {
         private readonly IProductRepository _productRepo;
         [BindProperty]
-        public List<Product> Products { get; private set; }
+        public IEnumerable<Product> Products { get; private set; }
         [BindProperty]
         public Product Product { get; private set; }
-        public bool GetProductsError { get; private set; }
-        public bool GetProductError { get; private set; }
-
         [BindProperty]
         public bool IsById { get; set; }
         public ProductModel(IProductRepository productRepo)
@@ -40,7 +37,7 @@ namespace CompletKitInstall.Pages
             {
                 await OnGetWithIdAsync(qid.Value);
             }
-            Products = (List<Product>)await _productRepo.Get();
+            Products = await _productRepo.Get();
             return Page();
         }
     }
