@@ -13,7 +13,7 @@ namespace CompletKitInstall.Models
 
         public IDbObject MakeNew()
         {
-            return new Category 
+            return new Category
             { 
                 Name=Name,
                 Description=Description

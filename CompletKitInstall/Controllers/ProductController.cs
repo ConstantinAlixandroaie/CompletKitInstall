@@ -1,5 +1,6 @@
 ﻿using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
+using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,8 +15,8 @@ namespace CompletKitInstall.Controllers
     public class ProductController:ControllerBase
     {
         private readonly ILogger<ProductController> _logger;
-        private readonly IRepository<Product> _productRepo;
-        public ProductController(IRepository<Product> productRepo,ILogger<ProductController> logger)
+        private readonly IRepository<Product,ProductViewModel> _productRepo;
+        public ProductController(IRepository<Product, ProductViewModel> productRepo,ILogger<ProductController> logger)
         {
             _productRepo = productRepo;
             _logger = logger;
@@ -34,13 +35,13 @@ namespace CompletKitInstall.Controllers
             return Ok(rv);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Product product)
+        public async Task<IActionResult> Add(ProductViewModel product)
         {
             var rv = await _productRepo.Add(product);
             return Ok(rv);
         }
         [HttpPost("{id}")]
-        public async Task<IActionResult> Update(int id,Product product)
+        public async Task<IActionResult> Update(int id, ProductViewModel product)
         {
             var rv = await _productRepo.Update(id,product);
             return Ok(rv);
@@ -48,8 +49,8 @@ namespace CompletKitInstall.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var rv = await _productRepo.RemoveById(id);
-            return Ok(rv);
+            await _productRepo.RemoveById(id);
+            return Ok();
         }
 
     }

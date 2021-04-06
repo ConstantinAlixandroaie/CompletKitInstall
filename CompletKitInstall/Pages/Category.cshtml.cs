@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
+using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,9 +17,9 @@ namespace CompletKitInstall.Pages
         private readonly ICategoryRepository _categoryRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
         [BindProperty]
-        public IEnumerable<Category> Categories { get; private set; }
+        public IEnumerable<CategoryViewModel> Categories { get; private set; }
         [BindProperty]
-        public Category Category { get; private set; }
+        public CategoryViewModel Category { get; private set; }
 
         public CategoryModel(ICategoryRepository categoryRepo,IWebHostEnvironment webHostEnvironment)
         {
@@ -28,10 +29,10 @@ namespace CompletKitInstall.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            Categories=  await _categoryRepo.Get();
+            Categories= (IEnumerable<CategoryViewModel>)await _categoryRepo.Get();
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync(Category category)
+        public async Task<IActionResult> OnPostAsync(CategoryViewModel category)
         {
             if (!ModelState.IsValid)
             {

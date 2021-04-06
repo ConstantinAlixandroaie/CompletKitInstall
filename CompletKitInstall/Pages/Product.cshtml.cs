@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
+using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,9 +17,9 @@ namespace CompletKitInstall.Pages
     {
         private readonly IProductRepository _productRepo;
         [BindProperty]
-        public IEnumerable<Product> Products { get; private set; }
+        public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
-        public Product Product { get; private set; }
+        public ProductViewModel Product { get; private set; }
         [BindProperty]
         public bool IsById { get; set; }
         public ProductModel(IProductRepository productRepo)

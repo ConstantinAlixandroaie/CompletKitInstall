@@ -1,5 +1,6 @@
 ﻿using CompletKitInstall.Data;
 using CompletKitInstall.Models;
+using CompletKitInstall.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace CompletKitInstall.Repositories
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface ICategoryRepository : IRepository<Category, CategoryViewModel>
     {
 
     }
-    public class CategoryRepository : Repository<Category>, ICategoryRepository
+    public class CategoryRepository : Repository<Category, CategoryViewModel>, ICategoryRepository
     {
         public CategoryRepository(CompletKitDbContext ctx) : base(ctx)
         {
 
         }
-        public override async Task<Category> Add(Category item)
+        public override async Task<Category> Add(CategoryViewModel item)
         {
             try
             {
@@ -44,14 +45,24 @@ namespace CompletKitInstall.Repositories
             }
 
         }
-        public override async Task<IEnumerable<Category>> Get(bool asNoTracking = false)
+        public override async Task<IEnumerable<CategoryViewModel>> Get(bool asNoTracking = false)
         {
             try
             {
-                var sourceCollection = _ctx.Categories.AsQueryable();
-                if (asNoTracking)
-                    sourceCollection = sourceCollection.AsNoTracking();
-                return await sourceCollection.ToListAsync();
+                var rv = new List<CategoryViewModel>();
+                var sourceCollection = await _ctx.Categories.ToListAsync();
+                foreach (var item in sourceCollection)
+                {
+                    var vm = new CategoryViewModel()
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Description = item.Description,
+                    };
+                    rv.Add(vm);
+
+                }
+                return rv;
             }
             catch (Exception ex)
             {
@@ -59,7 +70,7 @@ namespace CompletKitInstall.Repositories
             }
         }
 
-        public override async Task<Category> GetById(int id, bool asNoTracking = false)
+        public override async Task<CategoryViewModel> GetById(int id, bool asNoTracking = false)
         {
             try
             {
@@ -69,7 +80,13 @@ namespace CompletKitInstall.Repositories
                 var category = await sourceCollection.FirstOrDefaultAsync(x => x.Id == id);
                 if (category == null)
                     return null;
-                return category;
+                var rv = new CategoryViewModel
+                {
+                    Id=category.Id,
+                    Name = category.Name,
+                    Description = category.Description
+                };
+                return rv;
             }
             catch (Exception ex)
             {
@@ -77,24 +94,28 @@ namespace CompletKitInstall.Repositories
             }
         }
 
-        public override async Task<Category> RemoveById(int id)
+        public override Task<bool> Remove(CategoryViewModel item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override async Task RemoveById(int id)
         {
             try
             {
                 var category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id);
                 if (category == null)
-                    return null;
+                    throw new ArgumentException($"An Article with the given ID = '{id}' was not found ");
                 _ctx.Categories.Remove(category);
                 await _ctx.SaveChangesAsync();
-                return category;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
 
-        public override async Task<bool> Update(int id,Category newData)
+        public override async Task<bool> Update(int id, ViewModels.CategoryViewModel newData)
         {
             try
             {
