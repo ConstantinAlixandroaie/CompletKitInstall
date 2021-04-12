@@ -36,7 +36,8 @@ namespace CompletKitInstall.Repositories
                 {
                     Name = item.Name,
                     Description = item.Description,
-                    ImageUrl = item.ImageUrl
+                    ImageUrl = item.ImageUrl,
+                    DateCreated=DateTime.Now
                 };
                 _ctx.Products.Add(product);
                 await _ctx.SaveChangesAsync();
@@ -54,13 +55,14 @@ namespace CompletKitInstall.Repositories
             {
                 var rv = new List<ProductViewModel>();
                 var sourceCollection = await _ctx.Categories.ToListAsync();
-                foreach (var item in sourceCollection)
+                foreach (var product in sourceCollection)
                 {
                     var vm = new ProductViewModel()
                     {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Description = item.Description,
+                        Id = product.Id,
+                        Name = product.Name,
+                        Description = product.Description,
+                        DateCreated =product.DateCreated
                     };
                     rv.Add(vm);
 
@@ -91,6 +93,7 @@ namespace CompletKitInstall.Repositories
                     ImageUrl=product.ImageUrl,
                     CategoryId=product.CategoryId,
                     Category=product.Category,
+                    DateCreated =product.DateCreated
                 };
                 return rv;
             }

@@ -16,7 +16,10 @@ namespace CompletKitInstall.ViewModels
         public string Description { get; set; }
         [Required]
         public string ImageUrl { get; set; }
+        [Required]
         public Category Category { get; set; }
         public int CategoryId { get; set; }
+
+        public DateTimeOffset DateCreated { get; set; }
     }
 }

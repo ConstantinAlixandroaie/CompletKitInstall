@@ -33,6 +33,7 @@ namespace CompletKitInstall.Repositories
                 {
                     Name = item.Name,
                     Description = item.Description,
+                    DateCreated = DateTime.Now
                 };
                 _ctx.Categories.Add(category);
                 await _ctx.SaveChangesAsync();
@@ -51,13 +52,14 @@ namespace CompletKitInstall.Repositories
             {
                 var rv = new List<CategoryViewModel>();
                 var sourceCollection = await _ctx.Categories.ToListAsync();
-                foreach (var item in sourceCollection)
+                foreach (var category in sourceCollection)
                 {
                     var vm = new CategoryViewModel()
                     {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Description = item.Description,
+                        Id = category.Id,
+                        Name = category.Name,
+                        Description = category.Description,
+                        DateCreated=category.DateCreated
                     };
                     rv.Add(vm);
 
@@ -84,7 +86,8 @@ namespace CompletKitInstall.Repositories
                 {
                     Id=category.Id,
                     Name = category.Name,
-                    Description = category.Description
+                    Description = category.Description,
+                    DateCreated = category.DateCreated
                 };
                 return rv;
             }

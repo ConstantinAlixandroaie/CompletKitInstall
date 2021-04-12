@@ -29,7 +29,8 @@ namespace CompletKitInstall.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            Categories= (IEnumerable<CategoryViewModel>)await _categoryRepo.Get();
+            Categories= await _categoryRepo.Get();
+            Categories.ToList().OrderByDescending(x => x.DateCreated);
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(CategoryViewModel category)
@@ -39,7 +40,7 @@ namespace CompletKitInstall.Pages
                 return Page();
             }
             await _categoryRepo.Add(category);
-            return RedirectToPage("/Category");
+            return Page();
         }
     }
 }
