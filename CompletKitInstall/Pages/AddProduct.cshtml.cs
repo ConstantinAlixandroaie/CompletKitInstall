@@ -23,7 +23,12 @@ namespace CompletKitInstall.Pages
         public ProductViewModel Product { get; private set; }
         [Required]
         public IFormFile Image { get; set; }
+        public AddProductModel(IProductRepository productRepo,IWebHostEnvironment webHostEnvironment)
+        {
+            _productRepo = productRepo;
+            _webHostEnvironment = webHostEnvironment;
 
+        }
         public async Task<IActionResult> OnGetAsync()
         {
             Products = await _productRepo.Get();
