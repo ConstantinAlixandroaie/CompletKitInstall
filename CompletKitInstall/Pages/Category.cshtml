@@ -2,3 +2,67 @@
 @model CompletKitInstall.Pages.CategoryModel
 @{
 }
+
+<form id="categdata" method="post" class="col-sm-12" enctype="multipart/form-data">
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="form-group">
+    <div class="col-sm-12">
+        <label>Name</label>
+        <span></span>
+    </div>
+    <div class="col-sm-12">
+        <input class="col" asp-for="Category.Name" />
+        <span asp-validation-for="Category.Name" class="text-danger"></span>
+    </div>
+    <div class="col-sm-12">
+        <label>Description</label>
+    </div>
+    <div class="col-sm-12">
+        <textarea cols="60" rows="5" asp-for="Category.Description"></textarea>
+        <span asp-validation-for="Category.Description" class="text-danger"></span>
+    </div>
+    <div class="col-sm-12 ">
+        <input type="submit" asp-page-handler="Add" value="Add" />
+
+    </div>
+</div>
+</form>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model=>model.Category.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category.Description)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Categories)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

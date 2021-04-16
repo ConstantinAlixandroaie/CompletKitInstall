@@ -26,7 +26,7 @@ namespace CompletKitInstall.Pages
         public ProductViewModel Product { get; private set; }
         [Required]
         public IFormFile Image { get; set; }
-        public AddProductModel(IProductRepository productRepo,IWebHostEnvironment webHostEnvironment,ICategoryRepository categoryRepository)
+        public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository)
         {
             _productRepo = productRepo;
             _webHostEnvironment = webHostEnvironment;
@@ -35,16 +35,13 @@ namespace CompletKitInstall.Pages
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            Products = await _productRepo.Get();
-            Categories = await _categoryRepository.Get();
-            Products.ToList().OrderByDescending(x => x.DateCreated);
-            return Page();
+            return await GetPage();
         }
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                return Page();
+                return await GetPage();
             }
 
             var path = Path.Combine(_webHostEnvironment.WebRootPath, "Images/Products");
@@ -61,8 +58,16 @@ namespace CompletKitInstall.Pages
             }
 
             await _productRepo.Add(Product);
-            return Page();
 
+            return RedirectToPage("./AddProduct");
+        }
+
+        private async Task<IActionResult> GetPage()
+        {
+            Categories = await _categoryRepository.Get();
+            Products = await _productRepo.Get();
+            Products = Products.OrderByDescending(x => x.DateCreated);
+            return Page();
         }
     }
 }

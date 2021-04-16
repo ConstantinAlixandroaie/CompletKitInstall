@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace CompletKitInstall.Repositories
 {
-    public interface IProductRepository : IRepository<Product,ProductViewModel>
+    public interface IProductRepository : IRepository<Product, ProductViewModel>
     {
 
     }
-    public class ProductRepository : Repository<Product,ProductViewModel>, IProductRepository
+    public class ProductRepository : Repository<Product, ProductViewModel>, IProductRepository
     {
         public ProductRepository(CompletKitDbContext ctx) : base(ctx)
         {
@@ -30,14 +30,14 @@ namespace CompletKitInstall.Repositories
                     return null;
                 if (item.Description == null)
                     return null;
-                //if (item.CategoryId == null)
-                //    return null;
                 var product = new Product
                 {
                     Name = item.Name,
                     Description = item.Description,
                     ImageUrl = item.ImageUrl,
-                    DateCreated=DateTime.Now
+                    CategoryId = item.CategoryId,
+                    Category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == item.CategoryId),
+                    DateCreated = DateTime.Now
                 };
                 _ctx.Products.Add(product);
                 await _ctx.SaveChangesAsync();
@@ -49,12 +49,12 @@ namespace CompletKitInstall.Repositories
                 throw ex;
             }
         }
-        public override async Task<IEnumerable<ProductViewModel>>Get(bool asNoTracking = false)
+        public override async Task<IEnumerable<ProductViewModel>> Get(bool asNoTracking = false)
         {
             try
             {
                 var rv = new List<ProductViewModel>();
-                var sourceCollection = await _ctx.Categories.ToListAsync();
+                var sourceCollection = await _ctx.Products.ToListAsync();
                 foreach (var product in sourceCollection)
                 {
                     var vm = new ProductViewModel()
@@ -62,7 +62,7 @@ namespace CompletKitInstall.Repositories
                         Id = product.Id,
                         Name = product.Name,
                         Description = product.Description,
-                        DateCreated =product.DateCreated
+                        DateCreated = product.DateCreated
                     };
                     rv.Add(vm);
 
@@ -90,10 +90,10 @@ namespace CompletKitInstall.Repositories
                     Id = product.Id,
                     Name = product.Name,
                     Description = product.Description,
-                    ImageUrl=product.ImageUrl,
-                    CategoryId=product.CategoryId,
-                    Category=product.Category,
-                    DateCreated =product.DateCreated
+                    ImageUrl = product.ImageUrl,
+                    CategoryId = product.CategoryId,
+                    Category = product.Category,
+                    DateCreated = product.DateCreated
                 };
                 return rv;
             }

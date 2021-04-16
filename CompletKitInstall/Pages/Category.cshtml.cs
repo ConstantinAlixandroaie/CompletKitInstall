@@ -27,7 +27,7 @@ namespace CompletKitInstall.Pages
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             Categories= await _categoryRepo.Get();
             Categories.ToList().OrderByDescending(x => x.DateCreated);
@@ -40,7 +40,7 @@ namespace CompletKitInstall.Pages
                 return Page();
             }
             await _categoryRepo.Add(category);
-            return Page();
+            return RedirectToPage("./Category");
         }
     }
 }

@@ -6,7 +6,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <div class="col-sm-12">
-            <label>Title</label>
+            <label>Name</label>
             <span></span>
         </div>
         <div class="col-sm-12">
@@ -14,10 +14,10 @@
             <span asp-validation-for="Product.Name" class="text-danger"></span>
         </div>
         <div class="col-sm-12">
-            <label>Content</label>
+            <label>Description</label>
         </div>
         <div class="col-sm-12">
-            <textarea cols="60" rows="10" asp-for="Product.Description"></textarea>
+            <textarea cols="60" rows="5" asp-for="Product.Description"></textarea>
             <span asp-validation-for="Product.Description" class="text-danger"></span>
         </div>
         <div class="col-sm-12 ">
@@ -30,17 +30,62 @@
         <div class="col-sm-12">
             <label>Categories</label>
         </div>
-        <select asp-for="Product.CategoryId">
-            <option value="">Choose Role</option>
+        <select name="categorycombo" asp-for="Product.CategoryId">
+            <option value="">Choose Category</option>
             @foreach (var category in @Model.Categories)
             {
-                <option value="@category.Id.ToString()">@category.ToString()</option>
+                <option value="@category.Id.ToString()">@category.Name.ToString()</option>
             }
-
         </select>
         <div class="col-sm-12 ">
-            <input type="submit" asp-page-handler="Add" value="Add" />
-
+            <input type="submit" value="Add" />
         </div>
     </div>
 </form>
+
+<div class="row">
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product.DateCreated)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
