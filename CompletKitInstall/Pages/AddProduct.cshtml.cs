@@ -16,22 +16,27 @@ namespace CompletKitInstall.Pages
     public class AddProductModel : PageModel
     {
         private readonly IProductRepository _productRepo;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
+        public IEnumerable<CategoryViewModel> Categories { get; private set; }
+        [BindProperty]
         public ProductViewModel Product { get; private set; }
         [Required]
         public IFormFile Image { get; set; }
-        public AddProductModel(IProductRepository productRepo,IWebHostEnvironment webHostEnvironment)
+        public AddProductModel(IProductRepository productRepo,IWebHostEnvironment webHostEnvironment,ICategoryRepository categoryRepository)
         {
             _productRepo = productRepo;
             _webHostEnvironment = webHostEnvironment;
+            _categoryRepository = categoryRepository;
 
         }
         public async Task<IActionResult> OnGetAsync()
         {
             Products = await _productRepo.Get();
+            Categories = await _categoryRepository.Get();
             Products.ToList().OrderByDescending(x => x.DateCreated);
             return Page();
         }
