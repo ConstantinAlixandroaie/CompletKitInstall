@@ -25,6 +25,7 @@ namespace CompletKitInstall.Pages
         [BindProperty]
         public ProductViewModel Product { get; private set; }
         [Required]
+        [BindProperty] [FromForm]
         public IFormFile Image { get; set; }
         public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository)
         {
@@ -51,11 +52,17 @@ namespace CompletKitInstall.Pages
             }
 
             if (Image.Length > 0)
-            {
-                var fileStream = new FileStream(Path.Combine(path, Image.FileName), FileMode.Create);
-                Product.ImageUrl = Path.Combine("Images/Products", Image.FileName);
-                await Image.CopyToAsync(fileStream);
-            }
+                try
+                {
+                    var fileStream = new FileStream(Path.Combine(path, Image.FileName), FileMode.Create);
+                    Product.ImageUrl = Path.Combine("Images/Products", Image.FileName);
+                    await Image.CopyToAsync(fileStream);
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
 
             await _productRepo.Add(Product);
 

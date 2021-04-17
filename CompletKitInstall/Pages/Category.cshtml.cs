@@ -29,18 +29,23 @@ namespace CompletKitInstall.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Categories= await _categoryRepo.Get();
-            Categories.ToList().OrderByDescending(x => x.DateCreated);
-            return Page();
+            return await GetPage();
         }
         public async Task<IActionResult> OnPostAsync(CategoryViewModel category)
         {
             if (!ModelState.IsValid)
             {
-                return Page();
+                return await GetPage();
             }
             await _categoryRepo.Add(category);
-            return RedirectToPage("./Category");
+            return await GetPage();
+        }
+
+        private async Task<IActionResult> GetPage()
+        {
+            Categories = await _categoryRepo.Get();
+            Categories = Categories.OrderByDescending(x => x.DateCreated);
+            return Page();
         }
     }
 }
