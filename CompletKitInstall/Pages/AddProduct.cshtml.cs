@@ -23,9 +23,9 @@ namespace CompletKitInstall.Pages
         [BindProperty]
         public IEnumerable<CategoryViewModel> Categories { get; private set; }
         [BindProperty]
-        public ProductViewModel Product { get; private set; }
+        public ProductViewModel Product { get;  set; }
         [Required]
-        [BindProperty] [FromForm]
+        [BindProperty] 
         public IFormFile Image { get; set; }
         public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository)
         {
