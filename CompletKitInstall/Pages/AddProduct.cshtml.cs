@@ -58,10 +58,10 @@ namespace CompletKitInstall.Pages
                     Product.ImageUrl = Path.Combine("Images/Products", Image.FileName);
                     await Image.CopyToAsync(fileStream);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
-                    throw ex;
+                    throw;
                 }
 
             await _productRepo.Add(Product);

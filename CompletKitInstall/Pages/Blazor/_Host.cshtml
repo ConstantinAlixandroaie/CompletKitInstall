@@ -14,7 +14,6 @@
 
     @* This tells Blazor that our app is running relative to /Blazor/ *@
     <base href="~/Blazor/" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
     @* Added a / at the start here. The <base> tag above would otherwise cause us to look
         under /Blazor/css/site.css, and that isn't where the file is. *@
@@ -24,7 +23,7 @@
     <app>
         <component type="typeof(App)" render-mode="ServerPrerendered" />
     </app>
-
+    
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
             An error has occurred. This application may no longer respond until reloaded.

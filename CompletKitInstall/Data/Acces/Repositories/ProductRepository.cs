@@ -43,10 +43,10 @@ namespace CompletKitInstall.Repositories
                 await _ctx.SaveChangesAsync();
                 return product;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
         }
         public override async Task<IEnumerable<ProductViewModel>> Get(bool asNoTracking = false)
@@ -69,10 +69,10 @@ namespace CompletKitInstall.Repositories
                 }
                 return rv;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
-                throw ex;
+                throw;
             }
         }
         public override async Task<ProductViewModel> GetById(int id, bool asNoTracking = false)
@@ -97,10 +97,10 @@ namespace CompletKitInstall.Repositories
                 };
                 return rv;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
         }
 
@@ -119,10 +119,10 @@ namespace CompletKitInstall.Repositories
                 _ctx.Products.Remove(product);
                 await _ctx.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
 
         }
@@ -148,10 +148,10 @@ namespace CompletKitInstall.Repositories
                 await _ctx.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
-                throw ex;
+                throw;
             }
 
         }

@@ -39,10 +39,10 @@ namespace CompletKitInstall.Repositories
                 await _ctx.SaveChangesAsync();
                 return category;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
 
         }
@@ -66,9 +66,9 @@ namespace CompletKitInstall.Repositories
                 }
                 return rv;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -91,9 +91,9 @@ namespace CompletKitInstall.Repositories
                 };
                 return rv;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -112,9 +112,9 @@ namespace CompletKitInstall.Repositories
                 _ctx.Categories.Remove(category);
                 await _ctx.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -136,9 +136,9 @@ namespace CompletKitInstall.Repositories
                 await _ctx.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw;
             }
         }
     }

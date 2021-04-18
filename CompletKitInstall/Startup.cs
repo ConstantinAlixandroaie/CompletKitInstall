@@ -38,7 +38,7 @@ namespace CompletKitInstall
             services.AddRazorPages();
 
             services.AddServerSideBlazor();
-            
+
             //Added 
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -54,7 +54,7 @@ namespace CompletKitInstall
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                //app.UseDatabaseErrorPage();
             }
             else
             {
@@ -65,7 +65,7 @@ namespace CompletKitInstall
             app.UseHttpsRedirection();
             //app.UseDefaultFiles();
             app.UseStaticFiles();
-            
+
 
             app.UseRouting();
 
