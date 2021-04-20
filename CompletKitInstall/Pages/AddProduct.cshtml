@@ -10,14 +10,14 @@
             <span></span>
         </div>
         <div class="col-sm-12">
-            <input class="col form-control" asp-for="Product.Name" />
+            <input class="col" asp-for="Product.Name" />
             <span asp-validation-for="Product.Name" class="text-danger"></span>
         </div>
         <div class="col-sm-12">
             <label>Description</label>
         </div>
         <div class="col-sm-12">
-            <textarea cols="60" rows="5" class="form-control"  asp-for="Product.Description"></textarea>
+            <textarea cols="60" rows="5" asp-for="Product.Description"></textarea>
             <span asp-validation-for="Product.Description" class="text-danger"></span>
         </div>
         <div class="col-sm-12 ">
@@ -79,9 +79,9 @@
                             @Html.DisplayFor(modelItem => item.DateCreated)
                         </td>
                         <td>
-                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> 
+                            <a href="/Product/@item.Id">Details</a> 
+                            @*<a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>*@
                         </td>
                     </tr>
                 }

@@ -62,6 +62,7 @@ namespace CompletKitInstall.Repositories
                         Id = product.Id,
                         Name = product.Name,
                         Description = product.Description,
+                        ImageUrl=product.ImageUrl,
                         DateCreated = product.DateCreated
                     };
                     rv.Add(vm);

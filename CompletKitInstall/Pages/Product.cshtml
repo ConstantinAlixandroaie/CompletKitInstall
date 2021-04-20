@@ -11,7 +11,7 @@
         {
             <div class="col col-md-3  my-1">
                 <div class="card h-100">
-                    <img class="card-img-top" src="@item.ImageUrl" alt="Card image cap">
+                    <img class="card-img-top" src="~/@item.ImageUrl" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">@item.Name</h5>
                         <p class="card-text">@item.Description</p>
@@ -30,7 +30,7 @@ else
     <div class="container">
         <div class="row">
             <h3>@Model.Product.Name</h3>
-            <img src="@Model.Product.ImageUrl" />
+            <img src="~/@Model.Product.ImageUrl" />
             <p> @Model.Product.Description</p>
         </div>
     </div>
