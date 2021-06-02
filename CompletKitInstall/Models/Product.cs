@@ -12,6 +12,8 @@ namespace CompletKitInstall.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
+        //Images for catalog
+        public List<ProductImage> CatalogImageUrls { get; set; }
         public Category Category { get; set; }
         public int CategoryId { get; set; }
         public DateTimeOffset DateCreated { get; set; }

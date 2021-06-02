@@ -107,3 +107,9 @@ body {
 .mt-n12 {
     margin-top: -3.00rem !important;
 }
+
+/*product Slider image class*/
+.img-prod-slider {
+    width: 300px;
+    height: 300px;
+}

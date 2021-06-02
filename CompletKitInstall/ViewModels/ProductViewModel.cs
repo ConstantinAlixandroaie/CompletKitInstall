@@ -14,6 +14,7 @@ namespace CompletKitInstall.ViewModels
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
+        public List<string> CatalogImageUrls { get; set; }
         public string ImageUrl { get; set; }
         public Category Category { get; set; }
         [Required]

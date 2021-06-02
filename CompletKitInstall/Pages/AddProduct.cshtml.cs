@@ -21,12 +21,16 @@ namespace CompletKitInstall.Pages
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
+        public List<ProductImageViewModel> ProductImages { get; private set; }
+        [BindProperty]
         public IEnumerable<CategoryViewModel> Categories { get; private set; }
         [BindProperty]
-        public ProductViewModel Product { get;  set; }
+        public ProductViewModel Product { get; set; }
         [Required]
-        [BindProperty] 
+        [BindProperty]
         public IFormFile Image { get; set; }
+        [BindProperty]
+        public IFormFileCollection CatalogImages { get; set; }
         public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository)
         {
             _productRepo = productRepo;
@@ -63,8 +67,29 @@ namespace CompletKitInstall.Pages
 
                     throw;
                 }
-
-            await _productRepo.Add(Product);
+            if (CatalogImages != null)
+            {
+                try
+                {
+                    ProductImages = new List<ProductImageViewModel>();
+                    foreach (var image in CatalogImages)
+                    {
+                        var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create);
+                        var productImage = new ProductImageViewModel
+                        {
+                            ImageUrl = Path.Combine("Images/Products", image.FileName),
+                        };
+                        await image.CopyToAsync(fileStream);
+                        ProductImages.Add(productImage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                await _productRepo.AddProductAndImages(Product, ProductImages);
+            }
+            else
+                await _productRepo.Add(Product);
 
             return RedirectToPage("./AddProduct");
         }

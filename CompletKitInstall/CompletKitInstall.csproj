@@ -13,15 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20210315152740_help.cs" />
-    <Compile Remove="Data\Migrations\20210315152740_help.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210406103207_initial2.cs" />
-    <Compile Remove="Data\Migrations\20210406103207_initial2.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210406103536_initial2.cs" />
-    <Compile Remove="Data\Migrations\20210406103536_initial2.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.13" />
@@ -31,10 +22,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
 </Project>

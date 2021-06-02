@@ -42,6 +42,7 @@ namespace CompletKitInstall
             //Added 
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductImageRepository, ProductImageRepository>();
             //Add MVC to be able to separate front end from backend**no longer needed
             //services.AddMvc();
             //services.AddControllers();
