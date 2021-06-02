@@ -73,14 +73,9 @@ namespace CompletKitInstall.Repositories
                     };
                     _ctx.Products.Add(product);
                     await _ctx.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
 
-                    throw;
-                }
-                if (productImages == null)
-                    throw new ArgumentNullException("product Images list is empty");
+                    if (productImages == null)
+                        throw new ArgumentNullException("product Images list is empty");
                     foreach (var image in productImages)
                     {
                         try
@@ -93,21 +88,25 @@ namespace CompletKitInstall.Repositories
                             var productImage = new ProductImage
                             {
                                 ImageUrl = image.ImageUrl,
-                                ProductId = item.Id,
+                                ProductId = product.Id,
                                 Product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == image.ProductId),
                             };
                             _ctx.ProductImages.Add(productImage);
 
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
 
-                            throw;
+                            Console.WriteLine(ex);
                         }
                     }
-                
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
                 await _ctx.SaveChangesAsync();
-
             }
         }
 
@@ -124,7 +123,7 @@ namespace CompletKitInstall.Repositories
                         Id = product.Id,
                         Name = product.Name,
                         Description = product.Description,
-                        ImageUrl=product.ImageUrl,
+                        ImageUrl = product.ImageUrl,
                         DateCreated = product.DateCreated
                     };
                     rv.Add(vm);
@@ -132,7 +131,7 @@ namespace CompletKitInstall.Repositories
                 }
                 return rv;
             }
-            catch (Exception )
+            catch (Exception)
             {
 
                 throw;
@@ -211,7 +210,7 @@ namespace CompletKitInstall.Repositories
                 await _ctx.SaveChangesAsync();
                 return true;
             }
-            catch (Exception )
+            catch (Exception)
             {
 
                 throw;

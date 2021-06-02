@@ -16,20 +16,25 @@ namespace CompletKitInstall.Pages
     public class ProductModel : PageModel
     {
         private readonly IProductRepository _productRepo;
+        private readonly IProductImageRepository _productImageRepo;
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
+        [BindProperty]
+        public List<ProductImageViewModel> ProductImages { get; private set; }
         [BindProperty]
         public ProductViewModel Product { get; private set; }
         [BindProperty]
         public bool IsById { get; set; }
-        public ProductModel(IProductRepository productRepo)
+        public ProductModel(IProductRepository productRepo,IProductImageRepository productImageRepo)
         {
             _productRepo = productRepo;
+            _productImageRepo = productImageRepo;
         }
         public async Task<IActionResult> OnGetWithIdAsync(int id)
         {
             IsById = true;
             Product =await _productRepo.GetById(id);
+            ProductImages = await _productImageRepo.GetByProductId(id);
             return Page();
         }
         public async Task<IActionResult> OnGetAsync(int? qid = null)

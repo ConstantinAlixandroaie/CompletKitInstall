@@ -67,7 +67,7 @@ namespace CompletKitInstall.Pages
 
                     throw;
                 }
-            if (CatalogImages != null)
+            if (CatalogImages.Count > 0)
             {
                 try
                 {
@@ -85,6 +85,7 @@ namespace CompletKitInstall.Pages
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex);
                 }
                 await _productRepo.AddProductAndImages(Product, ProductImages);
             }

@@ -12,7 +12,8 @@ namespace CompletKitInstall.Data.Acces.Repositories
 { }
 public interface IProductImageRepository : IRepository<ProductImage, ProductImageViewModel>
 {
-
+    public abstract Task<List<ProductImageViewModel>> GetByProductId(int id, bool asNoTracking = false);
+       
 }
 public class ProductImageRepository : Repository<ProductImage, ProductImageViewModel>, IProductImageRepository
 {
@@ -89,7 +90,7 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
                 ImageUrl = productImage.ImageUrl,
             };
             return rv;
-                 
+
         }
         catch (Exception)
         {
@@ -98,7 +99,34 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
         }
     }
 
-    public override  Task<bool> Remove(ProductImageViewModel item)
+    public  async Task<List<ProductImageViewModel>> GetByProductId(int id, bool asNoTracking = false)
+    {
+        try
+        {
+            var rv = new List<ProductImageViewModel>();
+            var sourceCollection = await (from productImage in _ctx.ProductImages
+                                    where productImage.ProductId == id
+                                    select productImage).ToListAsync();
+
+            foreach (var image in sourceCollection)
+            {
+                var vm = new ProductImageViewModel
+                {
+                    Id = image.Id,
+                    ProductId = image.ProductId,
+                    ImageUrl = image.ImageUrl,
+                };
+                rv.Add(vm);
+            }
+            return rv;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public override Task<bool> Remove(ProductImageViewModel item)
     {
         throw new NotImplementedException();
     }
@@ -108,7 +136,7 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
         try
         {
             var productImage = await _ctx.ProductImages.FirstOrDefaultAsync(x => x.Id == id);
-            if(productImage==null)
+            if (productImage == null)
                 throw new ArgumentNullException($"The Image with Id= '{id}' does not exist.");
             _ctx.ProductImages.Remove(productImage);
             await _ctx.SaveChangesAsync();
@@ -131,7 +159,7 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
             {
                 productImage.ImageUrl = newData.ImageUrl;
             }
-            
+
             await _ctx.SaveChangesAsync();
             return true;
         }
