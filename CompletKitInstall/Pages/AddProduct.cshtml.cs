@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CompletKitInstall.Data;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +19,7 @@ namespace CompletKitInstall.Pages
         private readonly IProductRepository _productRepo;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IComplexOperationsHandler _complexOperationsHandler;
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
@@ -31,11 +33,12 @@ namespace CompletKitInstall.Pages
         public IFormFile Image { get; set; }
         [BindProperty]
         public IFormFileCollection CatalogImages { get; set; }
-        public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository)
+        public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository, IComplexOperationsHandler complexOperationsHandler)
         {
             _productRepo = productRepo;
             _webHostEnvironment = webHostEnvironment;
             _categoryRepository = categoryRepository;
+            _complexOperationsHandler = complexOperationsHandler;
 
         }
         public async Task<IActionResult> OnGetAsync()
@@ -87,11 +90,16 @@ namespace CompletKitInstall.Pages
                 {
                     Console.WriteLine(ex);
                 }
-                await _productRepo.AddProductAndImages(Product, ProductImages);
+                await _complexOperationsHandler.AddProductAndImages(Product, ProductImages);
             }
             else
                 await _productRepo.Add(Product);
 
+            return RedirectToPage("./AddProduct");
+        }
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            await _complexOperationsHandler.RemoveProductWithImages(id);
             return RedirectToPage("./AddProduct");
         }
 

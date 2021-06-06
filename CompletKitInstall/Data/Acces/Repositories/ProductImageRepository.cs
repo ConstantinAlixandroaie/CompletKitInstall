@@ -13,7 +13,8 @@ namespace CompletKitInstall.Data.Acces.Repositories
 public interface IProductImageRepository : IRepository<ProductImage, ProductImageViewModel>
 {
     public abstract Task<List<ProductImageViewModel>> GetByProductId(int id, bool asNoTracking = false);
-       
+    public abstract Task RemoveByProductId(int id);
+
 }
 public class ProductImageRepository : Repository<ProductImage, ProductImageViewModel>, IProductImageRepository
 {
@@ -99,14 +100,14 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
         }
     }
 
-    public  async Task<List<ProductImageViewModel>> GetByProductId(int id, bool asNoTracking = false)
+    public async Task<List<ProductImageViewModel>> GetByProductId(int id, bool asNoTracking = false)
     {
         try
         {
             var rv = new List<ProductImageViewModel>();
             var sourceCollection = await (from productImage in _ctx.ProductImages
-                                    where productImage.ProductId == id
-                                    select productImage).ToListAsync();
+                                          where productImage.ProductId == id
+                                          select productImage).ToListAsync();
 
             foreach (var image in sourceCollection)
             {
@@ -138,12 +139,34 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
             var productImage = await _ctx.ProductImages.FirstOrDefaultAsync(x => x.Id == id);
             if (productImage == null)
                 throw new ArgumentNullException($"The Image with Id= '{id}' does not exist.");
+
+
             _ctx.ProductImages.Remove(productImage);
             await _ctx.SaveChangesAsync();
         }
         catch (Exception)
         {
 
+            throw;
+        }
+    }
+
+    public async Task RemoveByProductId(int id)
+    {
+        try
+        {
+            var sourceCollection = await (from productImage in _ctx.ProductImages
+                                          where productImage.ProductId == id
+                                          select productImage).ToListAsync();
+
+            foreach (var image in sourceCollection)
+            {
+                _ctx.ProductImages.Remove(image);
+            }
+            await _ctx.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
             throw;
         }
     }

@@ -11,7 +11,7 @@ namespace CompletKitInstall.Repositories
 {
     public interface IProductRepository : IRepository<Product, ProductViewModel>
     {
-        public abstract Task AddProductAndImages(ProductViewModel product, List<ProductImageViewModel> productImages);
+        //public abstract Task AddProductAndImages(ProductViewModel product, List<ProductImageViewModel> productImages);
     }
     public class ProductRepository : Repository<Product, ProductViewModel>, IProductRepository
     {
@@ -50,65 +50,65 @@ namespace CompletKitInstall.Repositories
             }
         }
 
-        public async Task AddProductAndImages(ProductViewModel item, List<ProductImageViewModel> productImages)
-        {
-            using (var transaction = _ctx.Database.BeginTransaction())
-            {
-                try
-                {
-                    if (item == null)
-                        throw new ArgumentNullException();
-                    if (item.ImageUrl == null)
-                        throw new ArgumentNullException();
-                    if (item.Description == null)
-                        throw new ArgumentNullException();
-                    var product = new Product
-                    {
-                        Name = item.Name,
-                        Description = item.Description,
-                        ImageUrl = item.ImageUrl,
-                        CategoryId = item.CategoryId,
-                        Category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == item.CategoryId),
-                        DateCreated = DateTime.Now
-                    };
-                    _ctx.Products.Add(product);
-                    await _ctx.SaveChangesAsync();
+        //public async Task AddProductAndImages(ProductViewModel item, List<ProductImageViewModel> productImages)
+        //{
+        //    using (var transaction = _ctx.Database.BeginTransaction())
+        //    {
+        //        try
+        //        {
+        //            if (item == null)
+        //                throw new ArgumentNullException();
+        //            if (item.ImageUrl == null)
+        //                throw new ArgumentNullException();
+        //            if (item.Description == null)
+        //                throw new ArgumentNullException();
+        //            var product = new Product
+        //            {
+        //                Name = item.Name,
+        //                Description = item.Description,
+        //                ImageUrl = item.ImageUrl,
+        //                CategoryId = item.CategoryId,
+        //                Category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == item.CategoryId),
+        //                DateCreated = DateTime.Now
+        //            };
+        //            _ctx.Products.Add(product);
+        //            await _ctx.SaveChangesAsync();
 
-                    if (productImages == null)
-                        throw new ArgumentNullException("product Images list is empty");
-                    foreach (var image in productImages)
-                    {
-                        try
-                        {
-                            if (image == null)
-                                throw new ArgumentNullException("The image you want to upload is null.");
-                            if (image.ImageUrl == null)
-                                throw new ArgumentNullException("The image adress you want to upload is null.");
+        //            if (productImages == null)
+        //                throw new ArgumentNullException("product Images list is empty");
+        //            foreach (var image in productImages)
+        //            {
+        //                try
+        //                {
+        //                    if (image == null)
+        //                        throw new ArgumentNullException("The image you want to upload is null.");
+        //                    if (image.ImageUrl == null)
+        //                        throw new ArgumentNullException("The image adress you want to upload is null.");
 
-                            var productImage = new ProductImage
-                            {
-                                ImageUrl = image.ImageUrl,
-                                ProductId = product.Id,
-                                Product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == image.ProductId),
-                            };
-                            _ctx.ProductImages.Add(productImage);
+        //                    var productImage = new ProductImage
+        //                    {
+        //                        ImageUrl = image.ImageUrl,
+        //                        ProductId = product.Id,
+        //                        Product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == image.ProductId),
+        //                    };
+        //                    _ctx.ProductImages.Add(productImage);
 
-                        }
-                        catch (Exception ex)
-                        {
+        //                }
+        //                catch (Exception ex)
+        //                {
 
-                            Console.WriteLine(ex);
-                        }
-                    }
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-                await _ctx.SaveChangesAsync();
-            }
-        }
+        //                    Console.WriteLine(ex);
+        //                }
+        //            }
+        //            transaction.Commit();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine(ex);
+        //        }
+        //        await _ctx.SaveChangesAsync();
+        //    }
+        //}
 
         public override async Task<IEnumerable<ProductViewModel>> Get(bool asNoTracking = false)
         {

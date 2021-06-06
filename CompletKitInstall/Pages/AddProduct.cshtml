@@ -45,56 +45,56 @@
             <input type="file" multiple="multiple" asp-for="CatalogImages" />
             <span asp-validation-for="CatalogImages" class="text-danger"></span>
         </div>
-        
+
         <div class="col-sm-12 ">
             <button type="submit" class="btn-primary" value="Add"> Add </button>
         </div>
     </div>
 </form>
-
-<div class="row">
-    <div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Product.Id)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Product.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Product.Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Product.DateCreated)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Products)
-                {
+<form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div>
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
-                            <a href="/Product/@item.Id">Details</a>
-                            @*<a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>*@
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Product.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Product.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Product.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Product.DateCreated)
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="text-truncate" style="max-width: 150px;">
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateCreated)
+                            </td>
+                            <td>
+                                <button type="submit" asp-page-handler="delete" asp-route-id="@item.Id" class="btn btn-primary" onclick="this.blur();">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
     </div>
-</div>
+</form>
