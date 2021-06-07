@@ -1,10 +1,12 @@
 ﻿using CompletKitInstall.Data;
 using CompletKitInstall.Models;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CompletKitInstall.Repositories
@@ -15,11 +17,11 @@ namespace CompletKitInstall.Repositories
     }
     public class CategoryRepository : Repository<Category, CategoryViewModel>, ICategoryRepository
     {
-        public CategoryRepository(CompletKitDbContext ctx) : base(ctx)
+        public CategoryRepository(CompletKitDbContext ctx,IAuthorizationService authorizationService) : base(ctx, authorizationService)
         {
 
         }
-        public override async Task<Category> Add(CategoryViewModel item)
+        public override async Task<Category> Add(CategoryViewModel item, ClaimsPrincipal user)
         {
             try
             {
@@ -97,12 +99,12 @@ namespace CompletKitInstall.Repositories
             }
         }
 
-        public override Task<bool> Remove(CategoryViewModel item)
+        public override Task<bool> Remove(CategoryViewModel item, ClaimsPrincipal user)
         {
             throw new NotImplementedException();
         }
 
-        public override async Task RemoveById(int id)
+        public override async Task RemoveById(int id, ClaimsPrincipal user)
         {
             try
             {
@@ -118,7 +120,7 @@ namespace CompletKitInstall.Repositories
             }
         }
 
-        public override async Task<bool> Update(int id, ViewModels.CategoryViewModel newData)
+        public override async Task<bool> Update(int id,CategoryViewModel newData, ClaimsPrincipal user)
         {
             try
             {

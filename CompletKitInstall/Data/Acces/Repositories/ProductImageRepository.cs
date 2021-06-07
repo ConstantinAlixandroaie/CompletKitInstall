@@ -2,10 +2,12 @@
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CompletKitInstall.Data.Acces.Repositories
@@ -13,17 +15,17 @@ namespace CompletKitInstall.Data.Acces.Repositories
 public interface IProductImageRepository : IRepository<ProductImage, ProductImageViewModel>
 {
     public abstract Task<List<ProductImageViewModel>> GetByProductId(int id, bool asNoTracking = false);
-    public abstract Task RemoveByProductId(int id);
+    public abstract Task RemoveByProductId(int id, ClaimsPrincipal user);
 
 }
 public class ProductImageRepository : Repository<ProductImage, ProductImageViewModel>, IProductImageRepository
 {
-    public ProductImageRepository(CompletKitDbContext ctx) : base(ctx)
+    public ProductImageRepository(CompletKitDbContext ctx,IAuthorizationService authorizationService) : base(ctx,authorizationService)
     {
 
     }
 
-    public override async Task<ProductImage> Add(ProductImageViewModel item)
+    public override async Task<ProductImage> Add(ProductImageViewModel item, ClaimsPrincipal user)
     {
         try
         {
@@ -127,12 +129,12 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
         }
     }
 
-    public override Task<bool> Remove(ProductImageViewModel item)
+    public override Task<bool> Remove(ProductImageViewModel item, ClaimsPrincipal user)
     {
         throw new NotImplementedException();
     }
 
-    public override async Task RemoveById(int id)
+    public override async Task RemoveById(int id, ClaimsPrincipal user)
     {
         try
         {
@@ -151,7 +153,7 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
         }
     }
 
-    public async Task RemoveByProductId(int id)
+    public async Task RemoveByProductId(int id, ClaimsPrincipal user)
     {
         try
         {
@@ -171,7 +173,7 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
         }
     }
 
-    public override async Task<bool> Update(int id, ProductImageViewModel newData)
+    public override async Task<bool> Update(int id, ProductImageViewModel newData, ClaimsPrincipal user)
     {
         try
         {

@@ -1,6 +1,8 @@
+using CompletKitInstall.Authorization;
 using CompletKitInstall.Data;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,6 +46,11 @@ namespace CompletKitInstall
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductImageRepository, ProductImageRepository>();
             services.AddTransient<IComplexOperationsHandler, ComplexOperationsHandler>();
+
+            //Authorization
+            services.AddSingleton<IAuthorizationHandler, ManagerAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, AdministratorsAuthorizationHandler>();
+
             //Add MVC to be able to separate front end from backend**no longer needed
             //services.AddMvc();
             //services.AddControllers();

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CompletKitInstall.Controllers
@@ -37,19 +38,19 @@ namespace CompletKitInstall.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ProductViewModel product)
         {
-            var rv = await _productRepo.Add(product);
+            var rv = await _productRepo.Add(product,User);
             return Ok(rv);
         }
         [HttpPost("{id}")]
         public async Task<IActionResult> Update(int id, ProductViewModel product)
         {
-            var rv = await _productRepo.Update(id,product);
+            var rv = await _productRepo.Update(id,product,User);
             return Ok(rv);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _productRepo.RemoveById(id);
+            await _productRepo.RemoveById(id,User);
             return Ok();
         }
 

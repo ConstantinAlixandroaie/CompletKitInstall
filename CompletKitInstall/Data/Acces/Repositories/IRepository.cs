@@ -3,6 +3,7 @@ using CompletKitInstall.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CompletKitInstall.Repositories
@@ -13,9 +14,9 @@ namespace CompletKitInstall.Repositories
     {
         Task<IEnumerable<U>> Get(bool asNoTracking = false);
         Task<U> GetById(int id, bool asNoTracking = false);
-        Task<T> Add(U item);
-        Task<bool> Remove(U item);
-        Task RemoveById(int id);
-        Task<bool> Update(int id, U newData);
+        Task<T> Add(U item, ClaimsPrincipal user);
+        Task<bool> Remove(U item, ClaimsPrincipal user);
+        Task RemoveById(int id, ClaimsPrincipal user);
+        Task<bool> Update(int id, U newData, ClaimsPrincipal user);
     }
 }

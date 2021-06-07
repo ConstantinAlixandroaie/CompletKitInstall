@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CompletKitInstall.Data;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CompletKitInstall.Pages
 {
+    [Authorize(Roles ="Administrators,Managers")]
     public class AddProductModel : PageModel
     {
         private readonly IProductRepository _productRepo;
@@ -90,16 +92,16 @@ namespace CompletKitInstall.Pages
                 {
                     Console.WriteLine(ex);
                 }
-                await _complexOperationsHandler.AddProductAndImages(Product, ProductImages);
+                await _complexOperationsHandler.AddProductAndImages(Product, ProductImages,User);
             }
             else
-                await _productRepo.Add(Product);
+                await _productRepo.Add(Product,User);
 
             return RedirectToPage("./AddProduct");
         }
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            await _complexOperationsHandler.RemoveProductWithImages(id);
+            await _complexOperationsHandler.RemoveProductWithImages(id,User);
             return RedirectToPage("./AddProduct");
         }
 

@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CompletKitInstall.Pages
 {
+    [AllowAnonymous]
     public class ProductModel : PageModel
     {
         private readonly IProductRepository _productRepo;

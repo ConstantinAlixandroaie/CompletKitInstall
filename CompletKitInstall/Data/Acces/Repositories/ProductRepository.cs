@@ -1,27 +1,30 @@
 ﻿using CompletKitInstall.Data;
 using CompletKitInstall.Models;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CompletKitInstall.Repositories
 {
     public interface IProductRepository : IRepository<Product, ProductViewModel>
     {
-        //public abstract Task AddProductAndImages(ProductViewModel product, List<ProductImageViewModel> productImages);
+
     }
     public class ProductRepository : Repository<Product, ProductViewModel>, IProductRepository
     {
-        public ProductRepository(CompletKitDbContext ctx) : base(ctx)
+        public ProductRepository(CompletKitDbContext ctx,IAuthorizationService authorizationService) : base(ctx,authorizationService)
         {
 
         }
 
-        public override async Task<Product> Add(ProductViewModel item)
+        public override async Task<Product> Add(ProductViewModel item, ClaimsPrincipal user)
         {
+
             try
             {
                 if (item == null)
@@ -50,65 +53,6 @@ namespace CompletKitInstall.Repositories
             }
         }
 
-        //public async Task AddProductAndImages(ProductViewModel item, List<ProductImageViewModel> productImages)
-        //{
-        //    using (var transaction = _ctx.Database.BeginTransaction())
-        //    {
-        //        try
-        //        {
-        //            if (item == null)
-        //                throw new ArgumentNullException();
-        //            if (item.ImageUrl == null)
-        //                throw new ArgumentNullException();
-        //            if (item.Description == null)
-        //                throw new ArgumentNullException();
-        //            var product = new Product
-        //            {
-        //                Name = item.Name,
-        //                Description = item.Description,
-        //                ImageUrl = item.ImageUrl,
-        //                CategoryId = item.CategoryId,
-        //                Category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == item.CategoryId),
-        //                DateCreated = DateTime.Now
-        //            };
-        //            _ctx.Products.Add(product);
-        //            await _ctx.SaveChangesAsync();
-
-        //            if (productImages == null)
-        //                throw new ArgumentNullException("product Images list is empty");
-        //            foreach (var image in productImages)
-        //            {
-        //                try
-        //                {
-        //                    if (image == null)
-        //                        throw new ArgumentNullException("The image you want to upload is null.");
-        //                    if (image.ImageUrl == null)
-        //                        throw new ArgumentNullException("The image adress you want to upload is null.");
-
-        //                    var productImage = new ProductImage
-        //                    {
-        //                        ImageUrl = image.ImageUrl,
-        //                        ProductId = product.Id,
-        //                        Product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == image.ProductId),
-        //                    };
-        //                    _ctx.ProductImages.Add(productImage);
-
-        //                }
-        //                catch (Exception ex)
-        //                {
-
-        //                    Console.WriteLine(ex);
-        //                }
-        //            }
-        //            transaction.Commit();
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex);
-        //        }
-        //        await _ctx.SaveChangesAsync();
-        //    }
-        //}
 
         public override async Task<IEnumerable<ProductViewModel>> Get(bool asNoTracking = false)
         {
@@ -166,12 +110,12 @@ namespace CompletKitInstall.Repositories
             }
         }
 
-        public override Task<bool> Remove(ProductViewModel item)
+        public override Task<bool> Remove(ProductViewModel item, ClaimsPrincipal user)
         {
             throw new NotImplementedException();
         }
 
-        public override async Task RemoveById(int id)
+        public override async Task RemoveById(int id, ClaimsPrincipal user)
         {
             try
             {
@@ -188,7 +132,7 @@ namespace CompletKitInstall.Repositories
             }
 
         }
-        public override async Task<bool> Update(int id, ProductViewModel newData)
+        public override async Task<bool> Update(int id, ProductViewModel newData, ClaimsPrincipal user)
         {
             try
             {

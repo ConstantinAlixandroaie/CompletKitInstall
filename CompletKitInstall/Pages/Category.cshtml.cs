@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CompletKitInstall.Pages
 {
+    [Authorize(Roles ="Administrators,Managers")]
     public class CategoryModel : PageModel
     {
         private readonly ICategoryRepository _categoryRepo;
@@ -37,7 +39,7 @@ namespace CompletKitInstall.Pages
             {
                 return await GetPage();
             }
-            await _categoryRepo.Add(category);
+            await _categoryRepo.Add(category,User);
             return await GetPage();
         }
 
