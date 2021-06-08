@@ -1,3 +1,4 @@
+using CompletKitInstall.Areas.Identity.Services;
 using CompletKitInstall.Authorization;
 using CompletKitInstall.Data;
 using CompletKitInstall.Models;
@@ -50,6 +51,10 @@ namespace CompletKitInstall
             //Authorization
             services.AddSingleton<IAuthorizationHandler, ManagerAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, AdministratorsAuthorizationHandler>();
+
+            //EmailSender WithMailkit
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+            services.AddSingleton<IMailer, Mailer>();
 
             //Add MVC to be able to separate front end from backend**no longer needed
             //services.AddMvc();
