@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using MimeKit;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Hosting;
+using MailKit.Security;
 
 namespace CompletKitInstall.Areas.Identity.Services
 {
@@ -39,9 +40,10 @@ namespace CompletKitInstall.Areas.Identity.Services
                 using(var client =new SmtpClient())
                 {
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    client.SslProtocols = System.Security.Authentication.SslProtocols.Tls11;
                     if (_env.IsDevelopment())
                     {
-                        await client.ConnectAsync(_smtpSettings.Server, _smtpSettings.Port, true);
+                        await client.ConnectAsync(_smtpSettings.Server, _smtpSettings.Port, SecureSocketOptions.StartTls);
                     }
                     else
                     {
