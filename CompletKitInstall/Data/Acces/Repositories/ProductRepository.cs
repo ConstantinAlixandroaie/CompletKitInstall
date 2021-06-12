@@ -13,7 +13,7 @@ namespace CompletKitInstall.Repositories
 {
     public interface IProductRepository : IRepository<Product, ProductViewModel>
     {
-
+        public abstract Task<List<ProductViewModel>> GetBySearchInput(string searchString, string category);
     }
     public class ProductRepository : Repository<Product, ProductViewModel>, IProductRepository
     {
@@ -108,6 +108,57 @@ namespace CompletKitInstall.Repositories
 
                 throw;
             }
+        }
+
+        public async Task<List<ProductViewModel>> GetBySearchInput(string searchString, string category)
+        {
+            var rv = new List<ProductViewModel>();
+            var products =await( from arts in _ctx.Products
+                           select arts).ToListAsync();
+            var searchProducts = from arts in _ctx.Products
+                                   select arts;
+            if(!string.IsNullOrEmpty(searchString)|| !string.IsNullOrEmpty(category))
+            {
+                if (!string.IsNullOrEmpty(category))
+                {
+                    searchProducts = from prod in _ctx.Products
+                               join categs in _ctx.Categories on prod.CategoryId equals categs.Id
+                               where categs.Id == int.Parse(category)
+                               select prod;
+                }
+                if(!string.IsNullOrEmpty(searchString))
+                {
+                    searchProducts = searchProducts.Where(x => x.Name.Contains(searchString) || x.Description.Contains(searchString));
+                }
+                foreach (var product in searchProducts)
+                {
+                    var vm = new ProductViewModel()
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Description = product.Description,
+                        ImageUrl = product.ImageUrl,
+                        DateCreated = product.DateCreated
+                    };
+                    rv.Add(vm);
+                }
+            }
+            else
+            {
+                foreach (var product in products)
+                {
+                    var vm = new ProductViewModel()
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Description = product.Description,
+                        ImageUrl = product.ImageUrl,
+                        DateCreated = product.DateCreated
+                    };
+                    rv.Add(vm);
+                }
+            }
+            return rv;
         }
 
         public override Task<bool> Remove(ProductViewModel item, ClaimsPrincipal user)
