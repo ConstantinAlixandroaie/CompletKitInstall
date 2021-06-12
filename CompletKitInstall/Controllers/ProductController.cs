@@ -1,10 +1,12 @@
 ﻿using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
+using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CompletKitInstall.Controllers
@@ -14,17 +16,18 @@ namespace CompletKitInstall.Controllers
     public class ProductController:ControllerBase
     {
         private readonly ILogger<ProductController> _logger;
-        private readonly IRepository<Product> _productRepo;
-        public ProductController(IRepository<Product> productRepo)
+        private readonly IRepository<Product,ProductViewModel> _productRepo;
+        public ProductController(IRepository<Product, ProductViewModel> productRepo,ILogger<ProductController> logger)
         {
             _productRepo = productRepo;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-           //var rv= await _productRepo.Get(asNoTracking:true);
-           //return Ok(rv);
-            return Ok("You acted on product . get");
+           var rv= await _productRepo.Get(asNoTracking:true);
+           return Ok(rv);
+           //return Ok("You acted on product . get");
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -33,22 +36,22 @@ namespace CompletKitInstall.Controllers
             return Ok(rv);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Product product)
+        public async Task<IActionResult> Add(ProductViewModel product)
         {
-            var rv = await _productRepo.Add(product);
+            var rv = await _productRepo.Add(product,User);
             return Ok(rv);
         }
         [HttpPost("{id}")]
-        public async Task<IActionResult> Update(int id,Product product)
+        public async Task<IActionResult> Update(int id, ProductViewModel product)
         {
-            var rv = await _productRepo.Update(id,product);
+            var rv = await _productRepo.Update(id,product,User);
             return Ok(rv);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var rv = await _productRepo.RemoveById(id);
-            return Ok(rv);
+            await _productRepo.RemoveById(id,User);
+            return Ok();
         }
 
     }
