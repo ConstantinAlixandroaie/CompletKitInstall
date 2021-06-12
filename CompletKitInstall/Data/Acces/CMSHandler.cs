@@ -20,6 +20,7 @@ namespace CompletKitInstall.Data.Acces
     public class CMSHandler : ICMSHandler
     {
         public Task AddCardContent()
+
         {
             throw new NotImplementedException();
         }
