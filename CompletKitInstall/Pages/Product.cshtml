@@ -7,7 +7,7 @@
 @*Strip picture
 *@
 <div>
-    <img src="https://picsum.photos/1920/150" class="img-strip" />
+    <img src="~/Images/Stripcompletkitinstall.png" class="img-strip" />
 </div>
 
 @if (!Model.IsById)
@@ -15,10 +15,10 @@
 
     <div class="container">
         <hr />
-        <div>
+        <div class="row">
             <form method="get">
                 <p>
-                    Title: <input type="text" name="SearchString">
+                    Product Name: <input type="text" name="SearchString">
                     Category:<select asp-for="Category">
                         <option value="">All</option>
                         @foreach (var categ in @Model.Categories)
@@ -36,13 +36,13 @@
             @foreach (var item in Model.Products)
             {
                 <div class="col col-sm-2  my-1">
-                    <div class="card h-100">
+                    <div class="card">
                         <a href="/Product/@item.Id" class="img-wrap">
-                            <img class="card-img-top" src="~/@item.ImageUrl" alt="Card image cap">
+                            <img class="card-img-top rounded" src="~/@item.ImageUrl" alt="Card image cap">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">@item.Name</h5>
-                            <p class="card-text text-truncate" style="max-height: 250px;">@item.Description</p>
+                            <p class="card-text text-truncate w-100" style="max-height: 250px;">@item.Description</p>
                         </div>
                         <div class="card-footer">
 

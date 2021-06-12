@@ -12,6 +12,11 @@ namespace CompletKitInstall.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        //CMS DBset
+        public DbSet<CardContent> CardContents { get; set; }
+        public DbSet<CarouselContent> CarouselContents { get; set; }
+
+
         public CompletKitDbContext(DbContextOptions<CompletKitDbContext> options)
             : base(options)
         {
