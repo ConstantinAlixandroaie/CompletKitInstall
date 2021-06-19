@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CompletKitInstall.ViewModels
 {
-    public class CarouselContentViewModel
+    public class CarouselContentViewModel:IUIObject
     {
         public int Id { get; set; }
         public string ImageUrl { get; set; }

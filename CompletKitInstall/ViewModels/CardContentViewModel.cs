@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CompletKitInstall.ViewModels
 {
-    public class CardContentViewModel
+    public class CardContentViewModel:IUIObject
     {
         public int Id { get; set; }
         public string ImageUrl { get; set; }
