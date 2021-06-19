@@ -20,9 +20,31 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
         {
 
         }
-        public override Task<CardContent> Add(CardContentViewModel item, ClaimsPrincipal user)
+        public override async Task<CardContent> Add(CardContentViewModel item, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (item == null)
+                    return null;
+                if (item.CardText == null)
+                    return null;
+                if (item.ImageUrl == null)
+                    return null;
+                var cardContent = new CardContent
+                {
+                    CardText=item.CardText,
+                    CardFooter=item.CardFooter,
+                    ImageUrl=item.ImageUrl,
+                };
+                _ctx.CardContents.Add(cardContent);
+                await _ctx.SaveChangesAsync();
+                return cardContent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         public override Task<IEnumerable<CardContentViewModel>> Get(bool asNoTracking = false)
