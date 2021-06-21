@@ -21,9 +21,33 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
 
         }
 
-        public override Task<CarouselContent> Add(CarouselContentViewModel item, ClaimsPrincipal user)
+        public async override Task<CarouselContent> Add(CarouselContentViewModel item, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (item == null)
+                    return null;
+                if (item.ImageUrl == null)
+                    return null;
+                if (item.Title == null)
+                    return null;
+                if (item.SubTitle == null)
+                    return null;
+                var carouselContent = new CarouselContent
+                {
+                    Title=item.Title,
+                    SubTitle=item.SubTitle,
+                    ImageUrl=item.ImageUrl,
+                };
+                _ctx.CarouselContents.Add(carouselContent);
+                await _ctx.SaveChangesAsync();
+                return carouselContent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         public override Task<IEnumerable<CarouselContentViewModel>> Get(bool asNoTracking = false)

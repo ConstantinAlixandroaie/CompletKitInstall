@@ -75,10 +75,10 @@ namespace CompletKitInstall.Repositories
                 }
                 return rv;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Console.WriteLine(ex);
+                throw ex;
             }
         }
         public override async Task<ProductViewModel> GetById(int id, bool asNoTracking = false)
