@@ -2,6 +2,7 @@
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace CompletKitInstall.Data.Acces.CMSRepositories
 {
-    public interface ICarouselContentRepository:IRepository<CarouselContent,CarouselContentViewModel>
+    public interface ICarouselContentRepository : IRepository<CarouselContent, CarouselContentViewModel>
     {
 
     }
-    public class CarouselContentRepository:Repository<CarouselContent,CarouselContentViewModel>,ICarouselContentRepository
+    public class CarouselContentRepository : Repository<CarouselContent, CarouselContentViewModel>, ICarouselContentRepository
     {
         public CarouselContentRepository(CompletKitDbContext ctx, IAuthorizationService authorizationService) : base(ctx, authorizationService)
         {
@@ -35,9 +36,9 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
                     return null;
                 var carouselContent = new CarouselContent
                 {
-                    Title=item.Title,
-                    SubTitle=item.SubTitle,
-                    ImageUrl=item.ImageUrl,
+                    Title = item.Title,
+                    SubTitle = item.SubTitle,
+                    ImageUrl = item.ImageUrl,
                 };
                 _ctx.CarouselContents.Add(carouselContent);
                 await _ctx.SaveChangesAsync();
@@ -50,14 +51,56 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
             }
         }
 
-        public override Task<IEnumerable<CarouselContentViewModel>> Get(bool asNoTracking = false)
+        public async override Task<IEnumerable<CarouselContentViewModel>> Get(bool asNoTracking = false)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var rv = new List<CarouselContentViewModel>();
+                var sourceCollection = await _ctx.CarouselContents.ToListAsync();
+                foreach (var item in sourceCollection)
+                {
+                    var vm = new CarouselContentViewModel
+                    {
+                        Id = item.Id,
+                        ImageUrl = item.ImageUrl,
+                        Title = item.Title,
+                        SubTitle = item.SubTitle,
+                    };
+                    rv.Add(vm);
+                }
+                return rv;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw ex;
+            }
         }
 
-        public override Task<CarouselContentViewModel> GetById(int id, bool asNoTracking = false)
+        public async override Task<CarouselContentViewModel> GetById(int id, bool asNoTracking = false)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sourceCollection = _ctx.CarouselContents.AsQueryable();
+                if (asNoTracking)
+                    sourceCollection = sourceCollection.AsNoTracking();
+                var carouselContent = await sourceCollection.FirstOrDefaultAsync(x => x.Id == id);
+                if (carouselContent == null)
+                    throw new ArgumentNullException("The carousel Content you requested does not exist");
+                var rv = new CarouselContentViewModel
+                {
+                    Id = carouselContent.Id,
+                    Title = carouselContent.Title,
+                    SubTitle = carouselContent.SubTitle,
+                    ImageUrl = carouselContent.ImageUrl,
+                };
+                return rv;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw ex;
+            }
         }
 
         public override Task<bool> Remove(CarouselContentViewModel item, ClaimsPrincipal user)
@@ -65,14 +108,37 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
             throw new NotImplementedException();
         }
 
-        public override Task RemoveById(int id, ClaimsPrincipal user)
+        public async override Task RemoveById(int id, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            var carouselContent =await _ctx.CarouselContents.FirstOrDefaultAsync(x => x.Id == id);
+            if (carouselContent == null)
+                throw new ArgumentNullException("The Carousel item want to delete does not exist!");
+            _ctx.Remove(carouselContent);
+            await _ctx.SaveChangesAsync();
         }
 
-        public override Task<bool> Update(int id, CarouselContentViewModel newData, ClaimsPrincipal user)
+        public async override Task<bool> Update(int id, CarouselContentViewModel newData, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var carouselContent = await _ctx.CarouselContents.FirstOrDefaultAsync(x => x.Id == id);
+                if (carouselContent == null)
+                    return false;
+                if (newData.ImageUrl != null)
+                    carouselContent.ImageUrl = newData.ImageUrl;
+                if (newData.Title != null)
+                    carouselContent.Title = newData.Title;
+                if (carouselContent.SubTitle != null)
+                    carouselContent.SubTitle = newData.SubTitle;
+                await _ctx.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw ex;
+            }
+            
         }
     }
 }
