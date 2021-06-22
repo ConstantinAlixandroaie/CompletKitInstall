@@ -8,6 +8,7 @@
 
 </div>
 <form method="post" enctype="multipart/form-data">
-
-
+    <input type="file" asp-for="@Model.CarouselImage"/>
+    <input type="text" asp-for="@Model.Carousel.Title"/>
+    <input type="text" asp-for="@Model.Carousel.SubTitle" />
 </form>
