@@ -4,11 +4,67 @@
 }
 <h2>Site Content Manager</h2>
 <div>
-    <p>Use this page to update your front page carousel and the card shwing news.</p>
+    <p>Use this page to update your front page carousel and the card showing news.</p>
 
 </div>
-<form method="post" enctype="multipart/form-data">
-    <input type="file" asp-for="@Model.CarouselImage"/>
-    <input type="text" asp-for="@Model.Carousel.Title"/>
-    <input type="text" asp-for="@Model.Carousel.SubTitle" />
-</form>
+<div class="border row col-6">
+    <p>When selecting pictures that go on this form are of the dimensions 1920x500. This will ensure that the pictures you upload will maintain aspect ratio and will display all their contents. </p>
+    <form method="post" enctype="multipart/form-data">
+        <input class="row" type="text" asp-for="@Model.Carousel.Title" />
+        <input class="row" type="text" asp-for="@Model.Carousel.SubTitle" />
+        <input class="row" type="file" asp-for="@Model.CarouselImage" />
+    </form>
+
+</div>
+<div class=" row container-fluid">
+    <p> Preview of the carousel </p>
+    <div id="carosuelHomePage" class="carousel slide"  data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100 " " src="https://picsum.photos/id/237/1920/700" alt="First slide">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Slide 1</h5>
+                    <p>Descriere slide 1</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 " src="https://picsum.photos/id/238/1920/700" alt="Second slide">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Slide 2</h5>
+                    <p>Descriere slide 2</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 " src="https://picsum.photos/id/239/1920/700" alt="Third slide">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Slide 3</h5>
+                    <p>Descriere slide 3</p>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-target="#carosuelHomePage" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button type="button" class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-target="#carosuelHomePage" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<div class="row">
+    <p>Table with all carousel items</p>
+</div>
+
+<div class="border row col-6">
+    <form method="post" enctype="multipart/form-data">
+        <input type="text" asp-for="@Model.Card.CardText" />
+        <input type="text" asp-for="@Model.Card.CardFooter" />
+        <input type="file" asp-for="@Model.CardImage" />
+    </form>
+</div>

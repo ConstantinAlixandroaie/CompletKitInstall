@@ -23,7 +23,7 @@ namespace CompletKitInstall.Pages.CMS
         [BindProperty]
         public CarouselContentViewModel Carousel { get; set; }
         [BindProperty]
-        public CardContentViewModel CardContent { get; set; }
+        public CardContentViewModel Card { get; set; }
         public CarouselModel(ICardContentRepository cardContentRepo,ICarouselContentRepository carouselContentRepo,IWebHostEnvironment webHostEnvironment)
         {
             _cardContentRepo = cardContentRepo;
@@ -36,3 +36,4 @@ namespace CompletKitInstall.Pages.CMS
         }
     }
 }
+
