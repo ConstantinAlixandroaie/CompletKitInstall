@@ -1,6 +1,7 @@
 ﻿using CompletKitInstall.Data;
 using CompletKitInstall.Models;
 using CompletKitInstall.ViewModels;
+using CompletKitInstall.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using System.Security.Authentication;
 
 namespace CompletKitInstall.Repositories
 {
@@ -17,14 +20,12 @@ namespace CompletKitInstall.Repositories
     }
     public class ProductRepository : Repository<Product, ProductViewModel>, IProductRepository
     {
-        public ProductRepository(CompletKitDbContext ctx,IAuthorizationService authorizationService) : base(ctx,authorizationService)
+        public ProductRepository(CompletKitDbContext ctx, IAuthorizationService authorizationService, ILogger<ProductRepository> logger) : base(ctx, authorizationService, logger)
         {
-
         }
 
         public override async Task<Product> Add(ProductViewModel item, ClaimsPrincipal user)
         {
-
             try
             {
                 if (item == null)
@@ -42,16 +43,23 @@ namespace CompletKitInstall.Repositories
                     Category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == item.CategoryId),
                     DateCreated = DateTime.Now
                 };
-                _ctx.Products.Add(product);
-                await _ctx.SaveChangesAsync();
-                return product;
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, product, Operations.Create);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to add the product to the database is not authorized.");
+                else
+                {
+                    _ctx.Products.Add(product);
+                    await _ctx.SaveChangesAsync();
+                    return product;
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex.Message, "An error occurred adding the product in the database.");
+                throw ex;
             }
         }
+
 
 
         public override async Task<IEnumerable<ProductViewModel>> Get(bool asNoTracking = false)
@@ -113,20 +121,20 @@ namespace CompletKitInstall.Repositories
         public async Task<List<ProductViewModel>> GetBySearchInput(string searchString, string category)
         {
             var rv = new List<ProductViewModel>();
-            var products =await( from arts in _ctx.Products
-                           select arts).ToListAsync();
+            var products = await (from arts in _ctx.Products
+                                  select arts).ToListAsync();
             var searchProducts = from arts in _ctx.Products
-                                   select arts;
-            if(!string.IsNullOrEmpty(searchString)|| !string.IsNullOrEmpty(category))
+                                 select arts;
+            if (!string.IsNullOrEmpty(searchString) || !string.IsNullOrEmpty(category))
             {
                 if (!string.IsNullOrEmpty(category))
                 {
                     searchProducts = from prod in _ctx.Products
-                               join categs in _ctx.Categories on prod.CategoryId equals categs.Id
-                               where categs.Id == int.Parse(category)
-                               select prod;
+                                     join categs in _ctx.Categories on prod.CategoryId equals categs.Id
+                                     where categs.Id == int.Parse(category)
+                                     select prod;
                 }
-                if(!string.IsNullOrEmpty(searchString))
+                if (!string.IsNullOrEmpty(searchString))
                 {
                     searchProducts = searchProducts.Where(x => x.Name.Contains(searchString) || x.Description.Contains(searchString));
                 }
@@ -170,16 +178,23 @@ namespace CompletKitInstall.Repositories
         {
             try
             {
+
                 var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
                 if (product == null)
                     throw new ArgumentNullException($"The Product with Id= '{id}' does not exist.");
-                _ctx.Products.Remove(product);
-                await _ctx.SaveChangesAsync();
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, product, Operations.Create);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to remove the product from the database is not authorized.");
+                else
+                {
+                    _ctx.Products.Remove(product);
+                    await _ctx.SaveChangesAsync();
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex.Message, "An error occurred deleting the product from the database.");
+                throw ex;
             }
 
         }
@@ -188,27 +203,34 @@ namespace CompletKitInstall.Repositories
             try
             {
                 var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
+
                 if (product == null)
                     return false;
-                if (newData.ImageUrl != null)
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, product, Operations.Create);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to modify the product is not authorized.");
+                else
                 {
-                    product.ImageUrl = newData.ImageUrl;
+                    if (newData.ImageUrl != null)
+                    {
+                        product.ImageUrl = newData.ImageUrl;
+                    }
+                    if (newData.Description != null)
+                    {
+                        product.Description = newData.Description;
+                    }
+                    if (newData.Name != null)
+                    {
+                        product.Name = newData.Name;
+                    }
+                    await _ctx.SaveChangesAsync();
+                    return true;
                 }
-                if (newData.Description != null)
-                {
-                    product.Description = newData.Description;
-                }
-                if (newData.Name != null)
-                {
-                    product.Name = newData.Name;
-                }
-                await _ctx.SaveChangesAsync();
-                return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex.Message, "An error occurred editing the product.");
+                throw ex;
             }
 
         }

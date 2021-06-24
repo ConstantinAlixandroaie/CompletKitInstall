@@ -2,8 +2,9 @@
 using CompletKitInstall.Models;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,10 +17,12 @@ namespace CompletKitInstall.Repositories
     {
         protected CompletKitDbContext _ctx;
         protected readonly IAuthorizationService _authorizationService;
-        public Repository(CompletKitDbContext ctx,IAuthorizationService authorizationService)
+        protected readonly ILogger<Repository<T,U>> _logger;
+        public Repository(CompletKitDbContext ctx,IAuthorizationService authorizationService,ILogger<Repository<T,U>> logger)
         {
             _ctx = ctx;
             _authorizationService = authorizationService;
+            _logger = logger;
         }
         public abstract Task<T> Add(U item,ClaimsPrincipal user);
 

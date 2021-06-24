@@ -36,12 +36,23 @@ namespace CompletKitInstall
             services.AddDbContext<CompletKitDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<CompletKitDbContext>();
+            services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<CompletKitDbContext>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders(); ;
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddServerSideBlazor();
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                                             .RequireAuthenticatedUser()
+                                             .Build();
+            }
+            );
+
+            //services.AddServerSideBlazor();
 
             //Added 
             services.AddTransient<IProductRepository, ProductRepository>();
@@ -52,7 +63,7 @@ namespace CompletKitInstall
             services.AddTransient<ICarouselContentRepository, CarouselContentRepository>();
 
             //Authorization
-            services.AddSingleton<IAuthorizationHandler, ManagerAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, ManagerAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, AdministratorsAuthorizationHandler>();
 
             //EmailSender WithMailkit

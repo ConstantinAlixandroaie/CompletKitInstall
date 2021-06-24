@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CompletKitInstall.Authorization
 {
-    public class ArticleOperations
+    public class Operations
     {
         public static OperationAuthorizationRequirement Create =
          new OperationAuthorizationRequirement { Name = Constants.CreateOperationName };
