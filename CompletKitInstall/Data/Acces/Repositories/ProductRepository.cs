@@ -182,7 +182,7 @@ namespace CompletKitInstall.Repositories
                 var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
                 if (product == null)
                     throw new ArgumentNullException($"The Product with Id= '{id}' does not exist.");
-                var isAuthorized = await _authorizationService.AuthorizeAsync(user, product, Operations.Create);
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, product, Operations.Delete);
                 if (!isAuthorized.Succeeded)
                     throw new AuthenticationException("The user trying to remove the product from the database is not authorized.");
                 else
@@ -206,7 +206,7 @@ namespace CompletKitInstall.Repositories
 
                 if (product == null)
                     return false;
-                var isAuthorized = await _authorizationService.AuthorizeAsync(user, product, Operations.Create);
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, product, Operations.Update);
                 if (!isAuthorized.Succeeded)
                     throw new AuthenticationException("The user trying to modify the product is not authorized.");
                 else

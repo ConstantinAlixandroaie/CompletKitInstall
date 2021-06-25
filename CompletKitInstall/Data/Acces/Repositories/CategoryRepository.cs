@@ -1,11 +1,14 @@
-﻿using CompletKitInstall.Data;
+﻿using CompletKitInstall.Authorization;
+using CompletKitInstall.Data;
 using CompletKitInstall.Models;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -17,7 +20,7 @@ namespace CompletKitInstall.Repositories
     }
     public class CategoryRepository : Repository<Category, CategoryViewModel>, ICategoryRepository
     {
-        public CategoryRepository(CompletKitDbContext ctx,IAuthorizationService authorizationService) : base(ctx, authorizationService)
+        public CategoryRepository(CompletKitDbContext ctx,IAuthorizationService authorizationService,ILogger<CategoryRepository> logger) : base(ctx, authorizationService,logger)
         {
 
         }
@@ -37,14 +40,20 @@ namespace CompletKitInstall.Repositories
                     Description = item.Description,
                     DateCreated = DateTime.Now
                 };
-                _ctx.Categories.Add(category);
-                await _ctx.SaveChangesAsync();
-                return category;
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, category, Operations.Create);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to add the product to the database is not authorized.");
+                else
+                {
+                    _ctx.Categories.Add(category);
+                    await _ctx.SaveChangesAsync();
+                    return category;
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex.Message, "An error occurred adding the category in the database.");
+                throw ex;
             }
 
         }
@@ -109,14 +118,21 @@ namespace CompletKitInstall.Repositories
             try
             {
                 var category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id);
-                if (category == null)
-                    throw new ArgumentException($"An Article with the given ID = '{id}' was not found ");
-                _ctx.Categories.Remove(category);
-                await _ctx.SaveChangesAsync();
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, category, Operations.Delete);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to add the product to the database is not authorized.");
+                else
+                {
+                    if (category == null)
+                        throw new ArgumentException($"An Article with the given ID = '{id}' was not found ");
+                    _ctx.Categories.Remove(category);
+                    await _ctx.SaveChangesAsync();
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                _logger.LogError(ex.Message, "An error occurred deleting the category from the database.");
+                throw ex;
             }
         }
 
@@ -125,22 +141,29 @@ namespace CompletKitInstall.Repositories
             try
             {
                 var category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id);
-                if (category == null)
-                    return false;
-                if (newData.Name != null)
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, category, Operations.Update);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to add the category to the database is not authorized.");
+                else
                 {
-                    category.Name = newData.Name;
+                    if (category == null)
+                        return false;
+                    if (newData.Name != null)
+                    {
+                        category.Name = newData.Name;
+                    }
+                    if (newData.Description != null)
+                    {
+                        category.Description = category.Description;
+                    }
+                    await _ctx.SaveChangesAsync();
+                    return true;
                 }
-                if (newData.Description != null)
-                {
-                    category.Description = category.Description;
-                }
-                await _ctx.SaveChangesAsync();
-                return true;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                throw;
+                _logger.LogError(ex.Message, "An error occurred updating the category from the database.");
+                throw ex;
             }
         }
     }

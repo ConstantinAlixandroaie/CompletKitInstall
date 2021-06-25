@@ -1,11 +1,14 @@
-﻿using CompletKitInstall.Models;
+﻿using CompletKitInstall.Authorization;
+using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -17,7 +20,7 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
     }
     public class CarouselContentRepository : Repository<CarouselContent, CarouselContentViewModel>, ICarouselContentRepository
     {
-        public CarouselContentRepository(CompletKitDbContext ctx, IAuthorizationService authorizationService) : base(ctx, authorizationService)
+        public CarouselContentRepository(CompletKitDbContext ctx, IAuthorizationService authorizationService,ILogger<CarouselContentRepository> logger) : base(ctx, authorizationService,logger)
         {
 
         }
@@ -40,14 +43,20 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
                     SubTitle = item.SubTitle,
                     ImageUrl = item.ImageUrl,
                 };
-                _ctx.CarouselContents.Add(carouselContent);
-                await _ctx.SaveChangesAsync();
-                return carouselContent;
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, carouselContent, Operations.Create);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to delete the content from the database is not authorized.");
+                else
+                {
+                    _ctx.CarouselContents.Add(carouselContent);
+                    await _ctx.SaveChangesAsync();
+                    return carouselContent;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
-                throw;
+                _logger.LogError(ex.Message, "An error occurred removing the item from the database.");
+                throw ex;
             }
         }
 
@@ -110,11 +119,25 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
 
         public async override Task RemoveById(int id, ClaimsPrincipal user)
         {
-            var carouselContent =await _ctx.CarouselContents.FirstOrDefaultAsync(x => x.Id == id);
-            if (carouselContent == null)
-                throw new ArgumentNullException("The Carousel item want to delete does not exist!");
-            _ctx.Remove(carouselContent);
-            await _ctx.SaveChangesAsync();
+            try
+            {
+                var carouselContent = await _ctx.CarouselContents.FirstOrDefaultAsync(x => x.Id == id);
+                if (carouselContent == null)
+                    throw new ArgumentNullException("The Carousel item want to delete does not exist!");
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, carouselContent, Operations.Delete);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to delete the content from the database is not authorized.");
+                else
+                {
+                    _ctx.Remove(carouselContent);
+                    await _ctx.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, "An error occurred removing the item from the database.");
+                throw ex;
+            }
         }
 
         public async override Task<bool> Update(int id, CarouselContentViewModel newData, ClaimsPrincipal user)
@@ -124,21 +147,26 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
                 var carouselContent = await _ctx.CarouselContents.FirstOrDefaultAsync(x => x.Id == id);
                 if (carouselContent == null)
                     return false;
-                if (newData.ImageUrl != null)
-                    carouselContent.ImageUrl = newData.ImageUrl;
-                if (newData.Title != null)
-                    carouselContent.Title = newData.Title;
-                if (carouselContent.SubTitle != null)
-                    carouselContent.SubTitle = newData.SubTitle;
-                await _ctx.SaveChangesAsync();
-                return true;
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, carouselContent, Operations.Update);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to update the content from the database is not authorized.");
+                else
+                {
+                    if (newData.ImageUrl != null)
+                        carouselContent.ImageUrl = newData.ImageUrl;
+                    if (newData.Title != null)
+                        carouselContent.Title = newData.Title;
+                    if (carouselContent.SubTitle != null)
+                        carouselContent.SubTitle = newData.SubTitle;
+                    await _ctx.SaveChangesAsync();
+                    return true;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex.Message, "An error occurred removing the item from the database.");
                 throw ex;
             }
-            
         }
     }
 }

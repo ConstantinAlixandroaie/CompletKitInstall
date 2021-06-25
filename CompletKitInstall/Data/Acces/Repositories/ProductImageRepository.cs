@@ -1,12 +1,15 @@
-﻿using CompletKitInstall.Data;
+﻿using CompletKitInstall.Authorization;
+using CompletKitInstall.Data;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -20,7 +23,7 @@ public interface IProductImageRepository : IRepository<ProductImage, ProductImag
 }
 public class ProductImageRepository : Repository<ProductImage, ProductImageViewModel>, IProductImageRepository
 {
-    public ProductImageRepository(CompletKitDbContext ctx,IAuthorizationService authorizationService) : base(ctx,authorizationService)
+    public ProductImageRepository(CompletKitDbContext ctx, IAuthorizationService authorizationService, ILogger<ProductImageRepository> logger) : base(ctx, authorizationService, logger)
     {
 
     }
@@ -40,14 +43,20 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
                 ProductId = item.ProductId,
                 Product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId),
             };
-            _ctx.ProductImages.Add(productImage);
-            await _ctx.SaveChangesAsync();
-            return productImage;
+            var isAuthorized = await _authorizationService.AuthorizeAsync(user, productImage, Operations.Create);
+            if (!isAuthorized.Succeeded)
+                throw new AuthenticationException("The user trying to add the product to the database is not authorized.");
+            else
+            {
+                _ctx.ProductImages.Add(productImage);
+                await _ctx.SaveChangesAsync();
+                return productImage;
+            }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
+            _logger.LogError(ex.Message, "An error occurred adding the product in the database.");
+            throw ex;
         }
     }
 
@@ -141,15 +150,19 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
             var productImage = await _ctx.ProductImages.FirstOrDefaultAsync(x => x.Id == id);
             if (productImage == null)
                 throw new ArgumentNullException($"The Image with Id= '{id}' does not exist.");
-
-
-            _ctx.ProductImages.Remove(productImage);
-            await _ctx.SaveChangesAsync();
+            var isAuthorized = await _authorizationService.AuthorizeAsync(user, productImage, Operations.Delete);
+            if (!isAuthorized.Succeeded)
+                throw new AuthenticationException("The user trying to remove the product from the database is not authorized.");
+            else
+            {
+                _ctx.ProductImages.Remove(productImage);
+                await _ctx.SaveChangesAsync();
+            }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
+            _logger.LogError(ex.Message, "An error occurred adding the product in the database.");
+            throw ex;
         }
     }
 
@@ -160,16 +173,23 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
             var sourceCollection = await (from productImage in _ctx.ProductImages
                                           where productImage.ProductId == id
                                           select productImage).ToListAsync();
-
-            foreach (var image in sourceCollection)
+            var testImage = sourceCollection.First();
+            var isAuthorized = await _authorizationService.AuthorizeAsync(user, testImage, Operations.Delete);
+            if (!isAuthorized.Succeeded)
+                throw new AuthenticationException("The user trying to remove the images from the database is not authorized.");
+            else
             {
-                _ctx.ProductImages.Remove(image);
+                foreach (var image in sourceCollection)
+                {
+                    _ctx.ProductImages.Remove(image);
+                }
+                await _ctx.SaveChangesAsync();
             }
-            await _ctx.SaveChangesAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw;
+            _logger.LogError(ex.Message, "An error occurred adding the product in the database.");
+            throw ex;
         }
     }
 
@@ -178,20 +198,26 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
         try
         {
             var productImage = await _ctx.ProductImages.FirstOrDefaultAsync(x => x.Id == id);
+
             if (productImage == null)
                 return false;
-            if (newData.ImageUrl != null)
+            var isAuthorized = await _authorizationService.AuthorizeAsync(user, productImage, Operations.Update);
+            if (!isAuthorized.Succeeded)
+                throw new AuthenticationException("The user trying to remove the images from the database is not authorized.");
+            else
             {
-                productImage.ImageUrl = newData.ImageUrl;
+                if (newData.ImageUrl != null)
+                {
+                    productImage.ImageUrl = newData.ImageUrl;
+                }
+                await _ctx.SaveChangesAsync();
+                return true;
             }
-
-            await _ctx.SaveChangesAsync();
-            return true;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
+            _logger.LogError(ex.Message, "An error occurred editing the product in the database.");
+            throw ex;
         }
     }
 }

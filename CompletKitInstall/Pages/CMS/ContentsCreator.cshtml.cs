@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CompletKitInstall.Data.Acces.CMSRepositories;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CompletKitInstall.Pages.CMS
 {
+    [Authorize(Roles = "Administrators,Managers")]
     public class CarouselModel : PageModel
     {
         private readonly ICardContentRepository _cardContentRepo;

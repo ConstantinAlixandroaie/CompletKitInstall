@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace CompletKitInstall.Authorization
 {
     public class ManagerAuthorizationHandler :
-         AuthorizationHandler<OperationAuthorizationRequirement, Product>
+         AuthorizationHandler<OperationAuthorizationRequirement, IDbObject>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Product resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, IDbObject resource)
         {
             if (context.User == null || resource == null)
             {

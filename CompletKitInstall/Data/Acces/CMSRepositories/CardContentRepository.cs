@@ -1,11 +1,14 @@
-﻿using CompletKitInstall.Models;
+﻿using CompletKitInstall.Authorization;
+using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -17,7 +20,7 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
     }
     public class CardContentRepository : Repository<CardContent, CardContentViewModel>, ICardContentRepository
     {
-        public CardContentRepository(CompletKitDbContext ctx, IAuthorizationService authorizationService) : base(ctx, authorizationService)
+        public CardContentRepository(CompletKitDbContext ctx, IAuthorizationService authorizationService, ILogger<CardContentRepository> logger) : base(ctx, authorizationService, logger)
         {
 
         }
@@ -37,14 +40,20 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
                     CardFooter = item.CardFooter,
                     ImageUrl = item.ImageUrl,
                 };
-                _ctx.CardContents.Add(cardContent);
-                await _ctx.SaveChangesAsync();
-                return cardContent;
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, cardContent, Operations.Create);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to add content to the database is not authorized.");
+                else
+                {
+                    _ctx.CardContents.Add(cardContent);
+                    await _ctx.SaveChangesAsync();
+                    return cardContent;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
-                throw;
+                _logger.LogError(ex.Message, "An error occurred adding the item to the database.");
+                throw ex;
             }
         }
 
@@ -88,16 +97,16 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
                     throw new NullReferenceException("The card Content you requested does not exist!");
                 var rv = new CardContentViewModel
                 {
-                    Id=cardContent.Id,
-                    CardText=cardContent.CardText,
-                    CardFooter=cardContent.CardFooter,
-                    ImageUrl=cardContent.ImageUrl,
+                    Id = cardContent.Id,
+                    CardText = cardContent.CardText,
+                    CardFooter = cardContent.CardFooter,
+                    ImageUrl = cardContent.ImageUrl,
                 };
                 return rv;
             }
-            catch (Exception ex) 
-            { 
-                Console.WriteLine(ex); 
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
                 throw ex;
             }
         }
@@ -112,14 +121,20 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
             try
             {
                 var cardContent = await _ctx.CardContents.FirstOrDefaultAsync(x => x.Id == id);
-                if (cardContent == null)
-                    throw new ArgumentNullException("The Card Content you want to remove does not exist");
-                _ctx.CardContents.Remove(cardContent);
-                await _ctx.SaveChangesAsync();
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, cardContent, Operations.Delete);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to delete the content from the database is not authorized.");
+                else
+                {
+                    if (cardContent == null)
+                        throw new ArgumentNullException("The Card Content you want to remove does not exist");
+                    _ctx.CardContents.Remove(cardContent);
+                    await _ctx.SaveChangesAsync();
+                }
             }
-            catch (Exception ex)        
+            catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex.Message, "An error occurred removing the item from the database.");
                 throw ex;
             }
         }
@@ -129,21 +144,27 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
             try
             {
                 var cardContent = await _ctx.CardContents.FirstOrDefaultAsync(x => x.Id == id);
+
                 if (cardContent == null)
                     return false;
-                if (newData.CardText != null)
-                    cardContent.CardText = newData.CardText;
-                if (newData.CardFooter != null)
-                    cardContent.CardFooter = newData.CardFooter;
-                if (newData.ImageUrl != null)
-                    cardContent.ImageUrl = newData.ImageUrl;
-                await _ctx.SaveChangesAsync();
-                return true;
+                var isAuthorized = await _authorizationService.AuthorizeAsync(user, cardContent, Operations.Update);
+                if (!isAuthorized.Succeeded)
+                    throw new AuthenticationException("The user trying to delete the content from the database is not authorized.");
+                else
+                {
+                    if (newData.CardText != null)
+                        cardContent.CardText = newData.CardText;
+                    if (newData.CardFooter != null)
+                        cardContent.CardFooter = newData.CardFooter;
+                    if (newData.ImageUrl != null)
+                        cardContent.ImageUrl = newData.ImageUrl;
+                    await _ctx.SaveChangesAsync();
+                    return true;
+                }
             }
             catch (Exception ex)
             {
-
-                Console.WriteLine(ex);
+                _logger.LogError(ex.Message, "An error occurred removing the item from the database.");
                 throw ex;
             }
         }

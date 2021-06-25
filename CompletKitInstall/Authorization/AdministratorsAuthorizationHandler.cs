@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace CompletKitInstall.Authorization
 {
-    public class AdministratorsAuthorizationHandler: AuthorizationHandler<OperationAuthorizationRequirement, Product>
+    public class AdministratorsAuthorizationHandler: AuthorizationHandler<OperationAuthorizationRequirement, IDbObject>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Product resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, IDbObject resource)
         {
             if (context.User == null)
             {
