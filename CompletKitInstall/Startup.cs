@@ -62,6 +62,8 @@ namespace CompletKitInstall
             services.AddTransient<IComplexOperationsHandler, ComplexOperationsHandler>();
             services.AddTransient<ICardContentRepository, CardContentRepository>();
             services.AddTransient<ICarouselContentRepository, CarouselContentRepository>();
+            services.AddTransient<IFormatter, Formatter>();
+
 
             //Authorization
             services.AddScoped<IAuthorizationHandler, ManagerAuthorizationHandler>();

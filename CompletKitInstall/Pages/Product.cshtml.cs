@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using CompletKitInstall.Data;
 using CompletKitInstall.Data.Acces;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
@@ -21,7 +22,7 @@ namespace CompletKitInstall.Pages
         private readonly IProductRepository _productRepo;
         private readonly IProductImageRepository _productImageRepo;
         private readonly ICategoryRepository _categoryRepo;
-        private readonly IDescriptionFormatter _descriptionFormatter;
+        //private readonly IFormatter _formatter;
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
@@ -36,20 +37,22 @@ namespace CompletKitInstall.Pages
         public List<CategoryViewModel> Categories { get; set; }
         [BindProperty(SupportsGet = true)]
         public string Category { get; set; }
-        [BindProperty]
-        public List<string> ProductDescription { get; set; }
-        public ProductModel(IProductRepository productRepo,IProductImageRepository productImageRepo,ICategoryRepository categoryRepo,IDescriptionFormatter descriptionFormatter)
+        //[BindProperty]
+        //public List<string> ProductDescription { get; set; }
+
+        public ProductModel(IProductRepository productRepo, IProductImageRepository productImageRepo, ICategoryRepository categoryRepo /*IFormatter formatter*/)
         {
             _productRepo = productRepo;
             _productImageRepo = productImageRepo;
             _categoryRepo = categoryRepo;
-            _descriptionFormatter = descriptionFormatter;
+            //_formatter = formatter;
         }
+
         public async Task<IActionResult> OnGetWithIdAsync(int id)
         {
             IsById = true;
             Product =await _productRepo.GetById(id);
-            ProductDescription =await _descriptionFormatter.FormatStringInput(Product.Description);
+            //ProductDescription =await _formatter.ArrangeDescription(Product.Description);
             ProductImages = await _productImageRepo.GetByProductId(id);
 
             return Page();
