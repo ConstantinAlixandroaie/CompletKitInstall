@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using CompletKitInstall.Data.Acces;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
@@ -20,6 +21,7 @@ namespace CompletKitInstall.Pages
         private readonly IProductRepository _productRepo;
         private readonly IProductImageRepository _productImageRepo;
         private readonly ICategoryRepository _categoryRepo;
+        private readonly IDescriptionFormatter _descriptionFormatter;
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
@@ -34,18 +36,22 @@ namespace CompletKitInstall.Pages
         public List<CategoryViewModel> Categories { get; set; }
         [BindProperty(SupportsGet = true)]
         public string Category { get; set; }
-
-        public ProductModel(IProductRepository productRepo,IProductImageRepository productImageRepo,ICategoryRepository categoryRepo)
+        [BindProperty]
+        public List<string> ProductDescription { get; set; }
+        public ProductModel(IProductRepository productRepo,IProductImageRepository productImageRepo,ICategoryRepository categoryRepo,IDescriptionFormatter descriptionFormatter)
         {
             _productRepo = productRepo;
             _productImageRepo = productImageRepo;
             _categoryRepo = categoryRepo;
+            _descriptionFormatter = descriptionFormatter;
         }
         public async Task<IActionResult> OnGetWithIdAsync(int id)
         {
             IsById = true;
             Product =await _productRepo.GetById(id);
+            ProductDescription =await _descriptionFormatter.FormatStringInput(Product.Description);
             ProductImages = await _productImageRepo.GetByProductId(id);
+
             return Page();
         }
         public async Task<IActionResult> OnGetAsync(int? qid = null)

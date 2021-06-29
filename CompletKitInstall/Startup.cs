@@ -1,6 +1,7 @@
 using CompletKitInstall.Areas.Identity.Services;
 using CompletKitInstall.Authorization;
 using CompletKitInstall.Data;
+using CompletKitInstall.Data.Acces;
 using CompletKitInstall.Data.Acces.CMSRepositories;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;

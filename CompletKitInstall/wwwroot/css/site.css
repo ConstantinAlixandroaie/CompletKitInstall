@@ -157,3 +157,8 @@ body {
         -webkit-transition: .6s;
         transition: .6s
     }
+.prod-desc {
+    white-space: pre-wrap;
+    max-width: 100ch;
+    overflow:hidden; 
+}
