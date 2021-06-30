@@ -45,17 +45,6 @@ namespace CompletKitInstall.Data
                                 line.Clear();
                                 break;
                         }
-                        //if (letter.ToString() == " ")
-                        //{
-                        //    line.Append(word);
-                        //    line.Append(" ");
-                        //    word.Clear();
-                        //}
-                        //if (letter.ToString()=="\n")
-                        //{
-                        //    text.Add(line.ToString());
-                        //    line.Clear();
-                        //}
                     }
                     else
                     {

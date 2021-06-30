@@ -159,6 +159,6 @@ body {
     }
 .prod-desc {
     white-space: pre-wrap;
-    max-width: 100ch;
+    max-width:100ch;
     overflow:hidden; 
 }

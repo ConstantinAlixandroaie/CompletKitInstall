@@ -40,7 +40,7 @@ namespace CompletKitInstall.Pages
         //[BindProperty]
         //public List<string> ProductDescription { get; set; }
 
-        public ProductModel(IProductRepository productRepo, IProductImageRepository productImageRepo, ICategoryRepository categoryRepo /*IFormatter formatter*/)
+        public ProductModel(IProductRepository productRepo, IProductImageRepository productImageRepo, ICategoryRepository categoryRepo/*, IFormatter formatter*/)
         {
             _productRepo = productRepo;
             _productImageRepo = productImageRepo;
@@ -51,25 +51,23 @@ namespace CompletKitInstall.Pages
         public async Task<IActionResult> OnGetWithIdAsync(int id)
         {
             IsById = true;
-            Product =await _productRepo.GetById(id);
-            //ProductDescription =await _formatter.ArrangeDescription(Product.Description);
+            Product = await _productRepo.GetById(id);
+            //ProductDescription = await _formatter.ArrangeDescription(Product.Description);
             ProductImages = await _productImageRepo.GetByProductId(id);
-
             return Page();
         }
         public async Task<IActionResult> OnGetAsync(int? qid = null)
         {
             Categories = (List<CategoryViewModel>)await _categoryRepo.Get();
             if (qid != null)
-            {
                 await OnGetWithIdAsync(qid.Value);
-            }
-            if(!string.IsNullOrEmpty(searchString)||!string.IsNullOrEmpty(Category))
+
+            if (!string.IsNullOrEmpty(searchString) || !string.IsNullOrEmpty(Category))
             {
                 Products = await _productRepo.GetBySearchInput(searchString, Category);
             }
             else
-            Products = await _productRepo.Get();
+                Products = await _productRepo.Get();
             return Page();
         }
     }
