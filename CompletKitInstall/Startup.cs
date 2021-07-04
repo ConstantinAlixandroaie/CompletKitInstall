@@ -5,9 +5,11 @@ using CompletKitInstall.Data.Acces;
 using CompletKitInstall.Data.Acces.CMSRepositories;
 using CompletKitInstall.Models;
 using CompletKitInstall.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -37,12 +39,22 @@ namespace CompletKitInstall
             services.AddDbContext<CompletKitDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<CompletKitDbContext>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders(); ;
             services.AddControllersWithViews();
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential 
+                // cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                // requires using Microsoft.AspNetCore.Http;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             services.AddRazorPages();
 
             services.AddAuthorization(options =>
@@ -53,7 +65,6 @@ namespace CompletKitInstall
             }
             );
 
-            //services.AddServerSideBlazor();
 
             //Added 
             services.AddTransient<IProductRepository, ProductRepository>();
@@ -73,10 +84,10 @@ namespace CompletKitInstall
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IMailer, Mailer>();
 
-            //Add MVC to be able to separate front end from backend**no longer needed
-            //services.AddMvc();
-            //services.AddControllers();
+            
             services.AddHttpClient();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,13 +100,14 @@ namespace CompletKitInstall
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
             //app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
 
 
             app.UseRouting();
@@ -105,11 +117,11 @@ namespace CompletKitInstall
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                   pattern: "{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //   pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
+                //endpoints.MapControllers();
             });
         }
     }

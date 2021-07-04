@@ -54,7 +54,15 @@ namespace CompletKitInstall.Pages
             Product = await _productRepo.GetById(id);
             //ProductDescription = await _formatter.ArrangeDescription(Product.Description);
             ProductImages = await _productImageRepo.GetByProductId(id);
-            return Page();
+            try
+            {
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                //log exception
+                throw;
+            }
         }
         public async Task<IActionResult> OnGetAsync(int? qid = null)
         {
