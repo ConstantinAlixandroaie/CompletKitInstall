@@ -152,11 +152,11 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
                     throw new AuthenticationException("The user trying to delete the content from the database is not authorized.");
                 else
                 {
-                    if (newData.CardText != null)
+                    if (!string.IsNullOrEmpty(newData.CardText))
                         cardContent.CardText = newData.CardText;
-                    if (newData.CardFooter != null)
+                    if (!string.IsNullOrEmpty(newData.CardFooter))
                         cardContent.CardFooter = newData.CardFooter;
-                    if (newData.ImageUrl != null)
+                    if (!string.IsNullOrEmpty(newData.ImageUrl))
                         cardContent.ImageUrl = newData.ImageUrl;
                     await _ctx.SaveChangesAsync();
                     return true;

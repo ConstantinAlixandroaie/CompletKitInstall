@@ -211,15 +211,15 @@ namespace CompletKitInstall.Repositories
                     throw new AuthenticationException("The user trying to modify the product is not authorized.");
                 else
                 {
-                    if (newData.ImageUrl != null)
+                    if (!string.IsNullOrEmpty(newData.ImageUrl ))
                     {
                         product.ImageUrl = newData.ImageUrl;
                     }
-                    if (newData.Description != null)
+                    if (!string.IsNullOrEmpty(newData.Description))
                     {
                         product.Description = newData.Description;
                     }
-                    if (newData.Name != null)
+                    if (!string.IsNullOrEmpty(newData.Name))
                     {
                         product.Name = newData.Name;
                     }

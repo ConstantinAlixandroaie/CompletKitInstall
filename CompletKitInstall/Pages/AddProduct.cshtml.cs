@@ -12,16 +12,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace CompletKitInstall.Pages
 {
-    [Authorize(Roles ="Administrators,Managers")]
+    [Authorize(Roles = "Administrators,Managers")]
     public class AddProductModel : PageModel
     {
         private readonly IProductRepository _productRepo;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IComplexOperationsHandler _complexOperationsHandler;
+        private readonly ILogger _logger;
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
@@ -35,13 +37,13 @@ namespace CompletKitInstall.Pages
         public IFormFile Image { get; set; }
         [BindProperty]
         public IFormFileCollection CatalogImages { get; set; }
-        public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository, IComplexOperationsHandler complexOperationsHandler)
+        public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository, IComplexOperationsHandler complexOperationsHandler, ILogger logger)
         {
             _productRepo = productRepo;
             _webHostEnvironment = webHostEnvironment;
             _categoryRepository = categoryRepository;
             _complexOperationsHandler = complexOperationsHandler;
-
+            _logger = logger;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -63,14 +65,13 @@ namespace CompletKitInstall.Pages
             if (Image.Length > 0)
                 try
                 {
-                    var fileStream = new FileStream(Path.Combine(path, Image.FileName), FileMode.Create);
+                    using var fileStream = new FileStream(Path.Combine(path, Image.FileName), FileMode.Create);
                     Product.ImageUrl = Path.Combine("Images/Products", Image.FileName);
                     await Image.CopyToAsync(fileStream);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
-                    throw;
+                    _logger.LogError(ex.Message);
                 }
             if (CatalogImages.Count > 0)
             {
@@ -79,7 +80,7 @@ namespace CompletKitInstall.Pages
                     ProductImages = new List<ProductImageViewModel>();
                     foreach (var image in CatalogImages)
                     {
-                        var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create);
+                        using var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create);
                         var productImage = new ProductImageViewModel
                         {
                             ImageUrl = Path.Combine("Images/Products", image.FileName),
@@ -90,18 +91,18 @@ namespace CompletKitInstall.Pages
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    _logger.LogError(ex.Message);
                 }
-                await _complexOperationsHandler.AddProductAndImages(Product, ProductImages,User);
+                await _complexOperationsHandler.AddProductAndImages(Product, ProductImages, User);
             }
             else
-                await _productRepo.Add(Product,User);
+                await _productRepo.Add(Product, User);
 
             return RedirectToPage("./AddProduct");
         }
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            await _complexOperationsHandler.RemoveProductWithImages(id,User);
+            await _complexOperationsHandler.RemoveProductWithImages(id, User);
             return RedirectToPage("./AddProduct");
         }
 

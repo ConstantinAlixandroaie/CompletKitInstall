@@ -206,7 +206,7 @@ public class ProductImageRepository : Repository<ProductImage, ProductImageViewM
                 throw new AuthenticationException("The user trying to remove the images from the database is not authorized.");
             else
             {
-                if (newData.ImageUrl != null)
+                if (!string.IsNullOrEmpty(newData.ImageUrl))
                 {
                     productImage.ImageUrl = newData.ImageUrl;
                 }

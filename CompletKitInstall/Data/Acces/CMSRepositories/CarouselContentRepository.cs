@@ -152,11 +152,11 @@ namespace CompletKitInstall.Data.Acces.CMSRepositories
                     throw new AuthenticationException("The user trying to update the content from the database is not authorized.");
                 else
                 {
-                    if (newData.ImageUrl != null)
+                    if (!string.IsNullOrEmpty(newData.ImageUrl))
                         carouselContent.ImageUrl = newData.ImageUrl;
-                    if (newData.Title != null)
+                    if (!string.IsNullOrEmpty(newData.Title))
                         carouselContent.Title = newData.Title;
-                    if (carouselContent.SubTitle != null)
+                    if (!string.IsNullOrEmpty(carouselContent.SubTitle))
                         carouselContent.SubTitle = newData.SubTitle;
                     await _ctx.SaveChangesAsync();
                     return true;

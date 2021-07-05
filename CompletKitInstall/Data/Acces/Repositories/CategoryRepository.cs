@@ -148,11 +148,11 @@ namespace CompletKitInstall.Repositories
                 {
                     if (category == null)
                         return false;
-                    if (newData.Name != null)
+                    if (!string.IsNullOrEmpty(newData.Name))
                     {
                         category.Name = newData.Name;
                     }
-                    if (newData.Description != null)
+                    if (!string.IsNullOrEmpty(newData.Description))
                     {
                         category.Description = category.Description;
                     }
