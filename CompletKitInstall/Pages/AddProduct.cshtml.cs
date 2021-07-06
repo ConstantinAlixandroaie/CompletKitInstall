@@ -23,7 +23,7 @@ namespace CompletKitInstall.Pages
         private readonly ICategoryRepository _categoryRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IComplexOperationsHandler _complexOperationsHandler;
-        private readonly ILogger _logger;
+        private readonly ILogger<AddProductModel> _logger;
         [BindProperty]
         public IEnumerable<ProductViewModel> Products { get; private set; }
         [BindProperty]
@@ -37,7 +37,7 @@ namespace CompletKitInstall.Pages
         public IFormFile Image { get; set; }
         [BindProperty]
         public IFormFileCollection CatalogImages { get; set; }
-        public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository, IComplexOperationsHandler complexOperationsHandler, ILogger logger)
+        public AddProductModel(IProductRepository productRepo, IWebHostEnvironment webHostEnvironment, ICategoryRepository categoryRepository, IComplexOperationsHandler complexOperationsHandler, ILogger<AddProductModel> logger)
         {
             _productRepo = productRepo;
             _webHostEnvironment = webHostEnvironment;

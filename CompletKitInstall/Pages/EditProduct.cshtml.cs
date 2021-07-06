@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CompletKitInstall.Repositories;
 using CompletKitInstall.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,13 @@ using Microsoft.Extensions.Logging;
 
 namespace CompletKitInstall.Pages
 {
+    [Authorize(Roles = "Administrators,Managers")]
     public class EditProductModel : PageModel
     {
         private readonly IProductRepository _productRepo;
         private readonly IProductImageRepository _productImageRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly ILogger _logger;
+        private readonly ILogger<AddProductModel> _logger;
 
         [BindProperty]
         public ProductViewModel Product { get; set; }
@@ -27,7 +29,7 @@ namespace CompletKitInstall.Pages
         public IFormFileCollection CatalogImages { get; set; }
         [BindProperty]
         public IFormFile Image { get; set; }
-        public EditProductModel(IProductRepository productRepository,IWebHostEnvironment webHostEnvironment,ILogger logger,IProductImageRepository productImageRepository )
+        public EditProductModel(IProductRepository productRepository,IWebHostEnvironment webHostEnvironment,ILogger<AddProductModel> logger,IProductImageRepository productImageRepository )
         {
             _productRepo = productRepository;
             _productImageRepo = productImageRepository;

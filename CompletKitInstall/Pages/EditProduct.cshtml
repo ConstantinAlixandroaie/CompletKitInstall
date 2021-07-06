@@ -2,3 +2,40 @@
 @model CompletKitInstall.Pages.EditProductModel
 @{
 }
+<div class="row">
+    <h2>Edit Product @Model.Product.Name</h2>
+    <img src="~/@Model.Product.ImageUrl" class="img-thumbnail" />
+</div>
+<div class="row">
+    <div class="rounded-0 card col-md-4">
+        <div class="card-body">
+            <h3>Edit Product</h3>
+            <input type="text" asp-for="Product.Name"  />
+            <span asp-validation-for="Product.Name"></span>
+            <textarea  asp-for="Product.Description" ></textarea>
+            <span asp-validation-for="Product.Description"></span>
+            <input type="file" asp-for="Image" placeholder="New image" />
+        </div>
+    </div>
+    <div class="rounded-0 card col-md-4">
+        <div class="card-body">
+            <h3>Edit Product Images</h3>
+            <input type="file" asp-for="CatalogImages" multiple="multiple" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <table>
+        <thead>
+            
+        </thead>
+        <tbody>
+            @foreach (var item in @Model.CatalogImages)
+            {
+                <tr>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
