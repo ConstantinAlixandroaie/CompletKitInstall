@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 
 namespace CompletKitInstall.Pages
@@ -59,12 +60,18 @@ namespace CompletKitInstall.Pages
             }
             return RedirectToPage($"/Product/{id}");
         }
-        public async Task<IActionResult> OnDeleteAsync(int id)
+
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            if (!ModelState.IsValid)
-                return Page();
+            //if (!ModelState.IsValid)
+            //    return Page();
+            var prodId = _productImageRepo.GetById(id).Result.ProductId;
             await _productImageRepo.RemoveById(id, User);
-            return Page();
+            return new PartialViewResult {
+                ViewName = "~/Pages/Partials/_ProductImagesCardGroup.cshtml",
+                //ViewData.Model =new List<ProductImageViewModel> ProductImages,
+                ViewData = new ViewDataDictionary<List<ProductImageViewModel>>(ViewData,await _productImageRepo.GetByProductId(prodId)),
+            }; 
         }
     }
 }

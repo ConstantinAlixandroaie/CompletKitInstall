@@ -1,0 +1,55 @@
+﻿@using CompletKitInstall.ViewModels
+@model List<ProductImageViewModel>
+@*@model CompletKitInstall.Pages.EditProductModel*@
+@{
+
+}
+
+@if (Model.Count == 0)
+{
+    <div class="row justify-content-center text-center">
+        <div class="col-12 col-md-10 mt-5">
+
+            <i class="fa fa-user fa-5x mb-5"></i>
+
+            <h2>
+                No Pictures to show!
+            </h2>
+
+            <p class="text-muted">
+                You do not have any catalog images for this product yet. Add a new image in the form above.
+            </p>
+        </div>
+    </div> <!-- / .row -->
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-5 g-4 mt-2">
+        @foreach (var item in Model)
+        {
+            <div class="col my-1">
+                <div class="card prodcard h-100">
+                    <img class="card-img-top rounded" src="~/@item.ImageUrl" alt="Card image cap">
+                    <div class="card-body">
+                        <form asp-page-handler="delete" asp-route-id="@item.Id" method="post" data-ajax="true" data-ajax-update="#ProductImages">
+                            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+@functions {
+    string GetProductImages(ProductImage productImage)
+    {
+        return $"{productImage.ImageUrl} {productImage.ProductId}{productImage.Id}";
+    }
+}

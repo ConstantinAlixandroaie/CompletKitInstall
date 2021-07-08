@@ -1,41 +1,51 @@
 ﻿@page "{id}"
+@using CompletKitInstall.Pages.Partials
 @model CompletKitInstall.Pages.EditProductModel
 @{
 }
-<div class="row">
-    <h2>Edit Product @Model.Product.Name</h2>
-    <img src="~/@Model.Product.ImageUrl" class="img-thumbnail" />
-</div>
-<div class="row">
-    <div class="rounded-0 card col-md-4">
-        <div class="card-body">
-            <h3>Edit Product</h3>
-            <input type="text" asp-for="Product.Name"  />
-            <span asp-validation-for="Product.Name"></span>
-            <textarea  asp-for="Product.Description" ></textarea>
-            <span asp-validation-for="Product.Description"></span>
-            <input type="file" asp-for="Image" placeholder="New image" />
+<div class="container">
+    <div class="row align-items-lg-start">
+        <div class="col">
+            <h2>Edit Product: <a href="/Product/@Model.Product.Id" class="text-primary">@Model.Product.Name</a></h2>
+            <div class="col-4">
+                <img src="~/@Model.Product.ImageUrl" class="img-thumbnail" />
+            </div>
         </div>
     </div>
-    <div class="rounded-0 card col-md-4">
-        <div class="card-body">
-            <h3>Edit Product Images</h3>
-            <input type="file" asp-for="CatalogImages" multiple="multiple" />
+    <div class="row mt-2 gap-3 ">
+        <div class="rounded-2 card col-md-5 my-1">
+            <div class="card-body">
+                <h3>Edit Product</h3>
+                <div class="row">
+                    <input class="col-5" type="text" asp-for="Product.Name" />
+                    <span asp-validation-for="Product.Name"></span>
+                </div>
+                <div class="row">
+                    <textarea rows="10" asp-for="Product.Description"></textarea>
+                    <span asp-validation-for="Product.Description"></span>
+                </div>
+                <div class="row">
+                    <input type="file" asp-for="Image" placeholder="New image" />
+                    <span asp-validation-for="Image" />
+                </div>
+            </div>
+        </div>
+        <div class="rounded-2 card col-md-5 my-1">
+            <div class="card-body">
+                <h3>Edit Product Images</h3>
+                <input type="file" asp-for="CatalogImages" multiple="multiple" />
+            </div>
+            @* Here Preview for Uploaded Images *@
         </div>
     </div>
-</div>
-<div class="row">
-    <table>
-        <thead>
-            
-        </thead>
-        <tbody>
-            @foreach (var item in @Model.CatalogImages)
-            {
-                <tr>
 
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        @* Card group of current product Images *@
+        <div class="col">
+            <div id="ProductImages">
+                <partial name="Partials/_ProductImagesCardGroup.cshtml" model="@Model.ProductImages" />
+            </div>
+        </div>
+    </div>
+
 </div>
