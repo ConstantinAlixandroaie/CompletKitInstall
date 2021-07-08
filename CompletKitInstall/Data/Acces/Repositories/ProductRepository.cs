@@ -85,7 +85,7 @@ namespace CompletKitInstall.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex.Message);
                 throw ex;
             }
         }
@@ -111,10 +111,10 @@ namespace CompletKitInstall.Repositories
                 };
                 return rv;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex.Message);
+               throw;
             }
         }
 

@@ -30,14 +30,16 @@
         <div class="col-sm-12">
             <label>Categories</label>
         </div>
-        <select asp-for="Product.CategoryId">
-            <option value="">Choose Category</option>
-            @foreach (var category in @Model.Categories)
-            {
-                <option value="@category.Id.ToString()">@category.Name.ToString()</option>
-            }
-        </select>
-
+        <div>
+            <select asp-for="Product.CategoryId">
+                <option value="">Choose Category</option>
+                @foreach (var category in @Model.Categories)
+                {
+                    <option value="@category.Id.ToString()">@category.Name.ToString()</option>
+                }
+            </select>
+            <span asp-validation-for="Product.CategoryId"></span>
+        </div>
         <div class="col-sm-12 ">
             <label>Catalog Images</label>
         </div>

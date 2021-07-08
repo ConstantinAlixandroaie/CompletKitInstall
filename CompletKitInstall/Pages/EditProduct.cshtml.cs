@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CompletKitInstall.Repositories;
@@ -52,26 +53,49 @@ namespace CompletKitInstall.Pages
         }
         public async Task<IActionResult>OnAddImage(int id)
         {
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, "Images/Products");
             if (!ModelState.IsValid)
                 return Page();
-            foreach (var image in ProductImages)
+            try
             {
-                await _productImageRepo.Add(image,User);
+                ProductImages = new List<ProductImageViewModel>();
+                foreach (var image in CatalogImages)
+                {
+                    using var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create);
+                    var productImage = new ProductImageViewModel
+                    {
+                        ImageUrl = Path.Combine("Images/Products", image.FileName),
+                    };
+                    await image.CopyToAsync(fileStream);
+                    ProductImages.Add(productImage);
+                }
             }
-            return RedirectToPage($"/Product/{id}");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return RedirectToPage($"/Product/{Product.Id}");
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            //if (!ModelState.IsValid)
-            //    return Page();
             var prodId = _productImageRepo.GetById(id).Result.ProductId;
-            await _productImageRepo.RemoveById(id, User);
-            return new PartialViewResult {
-                ViewName = "~/Pages/Partials/_ProductImagesCardGroup.cshtml",
-                //ViewData.Model =new List<ProductImageViewModel> ProductImages,
-                ViewData = new ViewDataDictionary<List<ProductImageViewModel>>(ViewData,await _productImageRepo.GetByProductId(prodId)),
-            }; 
+            try
+            {
+                await _productImageRepo.RemoveById(id, User);
+                return new PartialViewResult
+                {
+                    ViewName = "~/Pages/Partials/_ProductImagesCardGroup.cshtml",
+                    ViewData = new ViewDataDictionary<List<ProductImageViewModel>>(ViewData, await _productImageRepo.GetByProductId(prodId)),
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Page();
+                throw ex;
+            }
+            
         }
     }
 }
