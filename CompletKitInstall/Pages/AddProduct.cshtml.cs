@@ -121,15 +121,15 @@ namespace CompletKitInstall.Pages
                 var ctlImagePaths = new List<string>();
                 foreach (var img in images)
                 {
-                    ctlImagePaths.Add(img.ImageUrl);
+                    ctlImagePaths.Add(Path.Combine(_webHostEnvironment.WebRootPath, img.ImageUrl));
                 }
 
                 await _complexOperationsHandler.RemoveProductWithImages(id, User);
 
-
-                var prodImg = new FileInfo(imgPath);
+                var prodImg = new FileInfo(Path.Combine(_webHostEnvironment.WebRootPath,imgPath)); 
+                prodImg.Refresh();
                 if (prodImg.Exists)
-                {
+               {
                     prodImg.Delete();
                     _logger.LogInformation($"File Deleted {prodImg.Name}");
                 }
