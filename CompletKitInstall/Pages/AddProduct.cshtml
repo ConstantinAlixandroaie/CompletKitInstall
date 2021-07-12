@@ -83,14 +83,16 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            <td class="text-truncate" style="max-width: 150px;">
+                            <td class="text-truncate" style="max-width: 100px;">
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.DateCreated)
                             </td>
                             <td>
-                                <button type="submit" asp-page-handler="delete" asp-route-id="@item.Id" class="btn btn-primary" onclick="this.blur();">Delete</button>
+                                <a class="btn btn-outline-secondary" href="/Product/@item.Id">Details</a>
+                                <a class="btn btn-outline-primary" href="/Editproduct/@item.Id">Edit</a>
+                                <button type="submit" asp-page-handler="delete" asp-route-id="@item.Id" class="btn btn-outline-danger" onclick="this.blur();">Delete</button>
                             </td>
                         </tr>
                     }

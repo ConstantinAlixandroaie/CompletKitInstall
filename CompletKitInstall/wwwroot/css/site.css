@@ -162,3 +162,19 @@ body {
     max-width:100ch;
     overflow:hidden; 
 }
+.img-preview{
+    max-height:80px;
+    max-width:80px;
+}
+.remove {
+    display: block;
+    background: #444;
+    border: 1px solid black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+.pip {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+}
