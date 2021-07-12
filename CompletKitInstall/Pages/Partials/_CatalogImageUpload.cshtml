@@ -3,13 +3,13 @@
 @{
 }
 <div class="rounded-2 card col-md-5 my-1">
-    <form asp-page-handler="AddImage" method="post" data-ajax="true" data-ajax-update="#ProductImages">
+    <form  method="post" data-ajax="true" data-ajax-update="#ProductImages">
         <div class="card-body">
             <h3>Edit Product Images</h3>
             <input type="file" asp-for="@Model" multiple="multiple" id="upload_file" name="upload_file" onchange="preview_image();" />
         </div>
 
-        <button type="submit" class="btn btn-sm btn-primary d-none d-md-inline-block">
+        <button type="submit" asp-page-handler="AddImages" class="btn btn-sm btn-primary d-none d-md-inline-block">
             Add
         </button>
     </form>

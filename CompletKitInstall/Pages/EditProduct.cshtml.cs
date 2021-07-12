@@ -51,7 +51,7 @@ namespace CompletKitInstall.Pages
             await _productRepo.Update(id,Product, User);
             return RedirectToPage($"/Product/{id}");
         }
-        public async Task<IActionResult>OnAddImage(int id)
+        public async Task<IActionResult>OnPostAddImages(int id)
         {
             var path = Path.Combine(_webHostEnvironment.WebRootPath, "Images/Products");
             if (!ModelState.IsValid)
