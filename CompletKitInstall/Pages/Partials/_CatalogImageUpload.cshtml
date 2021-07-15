@@ -1,36 +1,89 @@
-﻿@using CompletKitInstall.ViewModels
-@model List<ProductImageViewModel>
+﻿@using Microsoft.AspNetCore.Http;
+@model IFormFileCollection
 @{
 }
 <div class="rounded-2 card col-md-5 my-1">
-    <form  method="post" data-ajax="true" data-ajax-update="#ProductImages">
+    <form method="post" data-ajax="true" data-ajax-method="post">
         <div class="card-body">
             <h3>Edit Product Images</h3>
-            <input type="file" asp-for="@Model" multiple="multiple" id="upload_file" name="upload_file" onchange="preview_image();" />
+            <input asp-for="@Model" multiple="multiple" id="ctl_images" name="upload_file" class="form-control" onchange="preview_image();" />
         </div>
-
-        <button type="submit" asp-page-handler="AddImages" class="btn btn-sm btn-primary d-none d-md-inline-block">
+        <button class="btn btn-sm btn-primary d-none d-md-inline-block" type="submit" id="AddImages" onclick="clickbtn()">
             Add
         </button>
     </form>
-    <div id="image_preview">
+</div>
+<div id="image_preview">
 
-    </div>
-</div> 
+</div>
+
 
 <script>
     function preview_image() {
-        total_file = document.getElementById("upload_file").files.length;
+        total_file = document.getElementById("ctl_images").files.length;
         for (var i = 0; i < total_file; i++) {
-            $('#image_preview').append("<span class=\"pip\">"+
-
-                "<img class='img-preview' id='previmg"+ i + "'src='" + URL.createObjectURL(event.target.files[i]) + "'>"
+            $('#image_preview').append("<span class=\"pip\">" +
+                "<img class='img-preview' id='previmg" + i + "'src='" + URL.createObjectURL(event.target.files[i]) + "'>"
                 + "<br/><button class=\"btn-close\" aria-label='Close'></button>" + "</span>");
             $('.btn-close').click(function () {
                 $(this).parent(".pip").remove();
                 $('#previmg' + i).click(function () { (this).remove(); });
-            }
             });
         }
     }
+
+    //function clickbtn() {
+    //    $('#AddImages').on('click', function (evt) {
+    //        evt.preventDefault();
+    //        $.ajax({
+    //            type: "POST",
+    //            url: window.location.pathname + "?handler=AddImages",
+    //            contentType: false,
+    //            processData: false,
+    //            data: new FormData(document.forms[0]),
+
+    //            beforeSend: function (xhr) {
+    //                xhr.setRequestHeader("XSRF-TOKEN",
+    //                    $('input:hidden[name="__RequestVerificationToken"]').val());
+    //            },
+    //            success: function (response) {
+    //                console.log(response);
+    //            },
+    //            failure: function (response) {
+    //                console.log(response);
+    //            },
+    //        });
+    //    });
+    //}
+    function clickbtn() {
+        $("#AddImages").on('click', function () {
+            var files = $('#ctl_images').prop("files");
+            var url = window.location.pathname + "?handler=AddImages";
+            formData = new FormData();
+            formData.append("CatalogImages", files[0]);
+
+            jQuery.ajax({
+                type: 'POST',
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                success: function (repo) {
+                    if (repo.status == "success") {
+                        alert("File : " + repo.filename + " is uploaded successfully");
+                    }
+                },
+                error: function () {
+                    alert("Error occurs");
+                }
+            });
+        });
+    }
+
+
 </script>

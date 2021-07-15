@@ -46,6 +46,8 @@ namespace CompletKitInstall
                 .AddDefaultTokenProviders(); ;
             services.AddControllersWithViews();
 
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential 

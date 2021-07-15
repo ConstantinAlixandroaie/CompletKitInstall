@@ -44,37 +44,50 @@ namespace CompletKitInstall.Pages
             ProductImages = await _productImageRepo.GetByProductId(id);
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostEditAsync(int id)
         {
             if (!ModelState.IsValid)
                 return Page();
             await _productRepo.Update(id,Product, User);
             return RedirectToPage($"/Product/{id}");
         }
-        public async Task<IActionResult>OnPostAddImages(int id)
+        public async Task<IActionResult>OnPostAddImagesAsync()
         {
-            var path = Path.Combine(_webHostEnvironment.WebRootPath, "Images/Products");
-            if (!ModelState.IsValid)
-                return Page();
+            var pathCtl = Path.Combine(_webHostEnvironment.WebRootPath, "Images/CatalogImages");
+            //if (!ModelState.IsValid)
+            //    return Page();
+            //CatalogImages = (IFormFileCollection)Request.Form["ctl_Images"].ToList();
+           
             try
             {
                 ProductImages = new List<ProductImageViewModel>();
                 foreach (var image in CatalogImages)
                 {
-                    using var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create);
+                    var uniqueFileName = string.Concat(Guid.NewGuid().ToString(), image.FileName);
+                    using var fileStream = new FileStream(Path.Combine(pathCtl, uniqueFileName), FileMode.Create);
                     var productImage = new ProductImageViewModel
                     {
-                        ImageUrl = Path.Combine("Images/Products", image.FileName),
+                        ImageUrl = Path.Combine("Images/CatalogImages", uniqueFileName),
+                        ProductId=Product.Id,
                     };
                     await image.CopyToAsync(fileStream);
                     ProductImages.Add(productImage);
                 }
+                foreach (var item in ProductImages)
+                {
+                    await _productImageRepo.Add(item, User);
+                }
+                
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
-            return RedirectToPage($"/Product/{Product.Id}");
+            return new PartialViewResult
+            {
+                ViewName = "~/Pages/Partials/_CatalogImageUpload.cshtml",
+                ViewData = new ViewDataDictionary<IFormCollection>(ViewData),
+            };
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
