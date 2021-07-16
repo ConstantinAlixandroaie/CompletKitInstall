@@ -77,16 +77,16 @@ namespace CompletKitInstall.Pages
                 {
                     await _productImageRepo.Add(item, User);
                 }
-                
+
+                var result = await RefreshImages(Product.Id);
+                return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                return Page();
+                throw ex;
             }
-            return new PartialViewResult
-            {
-                ViewName = "~/Pages/Partials/_CatalogImageUpload.cshtml",
-            };
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
@@ -95,11 +95,9 @@ namespace CompletKitInstall.Pages
             try
             {
                 await _productImageRepo.RemoveById(id, User);
-                return new PartialViewResult
-                {
-                    ViewName = "~/Pages/Partials/_ProductImagesCardGroup.cshtml",
-                    ViewData = new ViewDataDictionary<List<ProductImageViewModel>>(ViewData, await _productImageRepo.GetByProductId(prodId)),
-                };
+                var result = await RefreshImages(prodId);
+                return result;
+
             }
             catch (Exception ex)
             {
@@ -107,7 +105,14 @@ namespace CompletKitInstall.Pages
                 return Page();
                 throw ex;
             }
-            
+        }
+        public async Task<IActionResult> RefreshImages(int id)
+        {
+            return new PartialViewResult
+            {
+                ViewName = "~/Pages/Partials/_ProductImagesCardGroup.cshtml",
+                ViewData = new ViewDataDictionary<List<ProductImageViewModel>>(ViewData, await _productImageRepo.GetByProductId(id)),
+            };
         }
     }
 }

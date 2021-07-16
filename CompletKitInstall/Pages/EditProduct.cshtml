@@ -33,16 +33,10 @@
             <div class="card-body">
                 <partial name="Partials/_CatalogImageUpload.cshtml" model="@Model.CatalogImages"/> 
             </div>
-            @*<div class="card-body">
-                <h3>Edit Product Images</h3>
-                <input type="file" asp-for="CatalogImages" multiple="multiple" />
-            </div>*@
-            @* Here Preview for Uploaded Images *@
         </div>
     </div>
 
     <div class="row">
-        @* Card group of current product Images *@
         <div class="col">
             <div id="ProductImages">
                 <partial name="Partials/_ProductImagesCardGroup.cshtml" model="@Model.ProductImages" />

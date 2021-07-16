@@ -17,6 +17,8 @@
 
 
 <script>
+
+    //preview Images to upload.
     function preview_image() {
         total_file = document.getElementById("ctl_images").files.length;
         for (var i = 0; i < total_file; i++) {
@@ -30,32 +32,8 @@
         }
     }
 
-    //function clickbtn() {
-    //    $('#AddImages').on('click', function (evt) {
-    //        evt.preventDefault();
-    //        $.ajax({
-    //            type: "POST",
-    //            url: window.location.pathname + "?handler=AddImages",
-    //            contentType: false,
-    //            processData: false,
-    //            data: new FormData(document.forms[0]),
-
-    //            beforeSend: function (xhr) {
-    //                xhr.setRequestHeader("XSRF-TOKEN",
-    //                    $('input:hidden[name="__RequestVerificationToken"]').val());
-    //            },
-    //            success: function (response) {
-    //                console.log(response);
-    //            },
-    //            failure: function (response) {
-    //                console.log(response);
-    //            },
-    //        });
-    //    });
-    //}
-
+    //Load multiple Images to product catalog.
     function clickbtn() {
-        // $("#AddImages").on('click', function () {
         var files = document.getElementById('ctl_images').files;
         var url = window.location.pathname + "?handler=AddImages";
         formData = new FormData();
@@ -80,10 +58,18 @@
             },
             error: function () {
                 alert("Error occurs");
-            }
+            },
         });
+        //jQuery.ajax({
+        //    url: window.location.pathname + "?handler=RefreshImages",    
+        //    type: "POST",
+        //    datatype: "HTML",
+        //    beforeSend: function (xhr) {
+        //        xhr.setRequestHeader("XSRF-TOKEN",
+        //            $('input:hidden[name="__RequestVerificationToken"]').val());
+        //    },
+        //    success: alert("done"),  
         //});
     }
-
 
 </script>
