@@ -2,17 +2,15 @@
 @model IFormFileCollection
 @{
 }
-<div class="rounded-2 card col-md-5 my-1">
-    <form method="post" data-ajax="true" data-ajax-method="post">
-        <div class="card-body">
-            <h3>Edit Product Images</h3>
-            <input asp-for="@Model" multiple="multiple" id="ctl_images" name="upload_file" class="form-control" onchange="preview_image();" />
-        </div>
-        <button class="btn btn-sm btn-primary d-none d-md-inline-block" type="submit" id="AddImages" onclick="clickbtn()">
-            Add
-        </button>
-    </form>
-</div>
+<form method="post" data-ajax="true" data-ajax-method="post">
+    <div class="card-body">
+        <h3>Edit Product Images</h3>
+        <input asp-for="@Model" multiple="multiple" id="ctl_images" name="upload_file" class="form-control" onchange="preview_image();" />
+    </div>
+    <button class="btn btn-sm btn-primary d-none d-md-inline-block" type="submit" id="AddImages" onclick="clickbtn();">
+        Add
+    </button>
+</form>
 <div id="image_preview">
 
 </div>
@@ -55,34 +53,36 @@
     //        });
     //    });
     //}
-    function clickbtn() {
-        $("#AddImages").on('click', function () {
-            var files = $('#ctl_images').prop("files");
-            var url = window.location.pathname + "?handler=AddImages";
-            formData = new FormData();
-            formData.append("CatalogImages", files[0]);
 
-            jQuery.ajax({
-                type: 'POST',
-                url: url,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("XSRF-TOKEN",
-                        $('input:hidden[name="__RequestVerificationToken"]').val());
-                },
-                success: function (repo) {
-                    if (repo.status == "success") {
-                        alert("File : " + repo.filename + " is uploaded successfully");
-                    }
-                },
-                error: function () {
-                    alert("Error occurs");
+    function clickbtn() {
+        // $("#AddImages").on('click', function () {
+        var files = document.getElementById('ctl_images').files;
+        var url = window.location.pathname + "?handler=AddImages";
+        formData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            formData.append("CatalogImages", files[i]);
+        }
+        jQuery.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            success: function (repo) {
+                if (repo.status == "success") {
+                    alert("File : " + repo.filename + " is uploaded successfully");
                 }
-            });
+            },
+            error: function () {
+                alert("Error occurs");
+            }
         });
+        //});
     }
 
 

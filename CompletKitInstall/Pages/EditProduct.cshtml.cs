@@ -86,7 +86,6 @@ namespace CompletKitInstall.Pages
             return new PartialViewResult
             {
                 ViewName = "~/Pages/Partials/_CatalogImageUpload.cshtml",
-                ViewData = new ViewDataDictionary<IFormCollection>(ViewData),
             };
         }
 
