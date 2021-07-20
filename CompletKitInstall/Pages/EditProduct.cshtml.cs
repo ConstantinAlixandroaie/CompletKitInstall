@@ -31,7 +31,7 @@ namespace CompletKitInstall.Pages
         public IFormFileCollection CatalogImages { get; set; }
         [BindProperty]
         public IFormFile Image { get; set; }
-        public EditProductModel(IProductRepository productRepository,IWebHostEnvironment webHostEnvironment,ILogger<AddProductModel> logger,IProductImageRepository productImageRepository )
+        public EditProductModel(IProductRepository productRepository, IWebHostEnvironment webHostEnvironment, ILogger<AddProductModel> logger, IProductImageRepository productImageRepository)
         {
             _productRepo = productRepository;
             _productImageRepo = productImageRepository;
@@ -48,16 +48,16 @@ namespace CompletKitInstall.Pages
         {
             if (!ModelState.IsValid)
                 return Page();
-            await _productRepo.Update(id,Product, User);
+            await _productRepo.Update(id, Product, User);
             return RedirectToPage($"/Product/{id}");
         }
-        public async Task<IActionResult>OnPostAddImagesAsync()
+        public async Task<IActionResult> OnPostAddImagesAsync()
         {
             var pathCtl = Path.Combine(_webHostEnvironment.WebRootPath, "Images/CatalogImages");
             //if (!ModelState.IsValid)
             //    return Page();
             //CatalogImages = (IFormFileCollection)Request.Form["ctl_Images"].ToList();
-           
+
             try
             {
                 ProductImages = new List<ProductImageViewModel>();
@@ -68,7 +68,7 @@ namespace CompletKitInstall.Pages
                     var productImage = new ProductImageViewModel
                     {
                         ImageUrl = Path.Combine("Images/CatalogImages", uniqueFileName),
-                        ProductId=Product.Id,
+                        ProductId = Product.Id,
                     };
                     await image.CopyToAsync(fileStream);
                     ProductImages.Add(productImage);
@@ -78,7 +78,7 @@ namespace CompletKitInstall.Pages
                     await _productImageRepo.Add(item, User);
                 }
 
-                var result = await RefreshImages(Product.Id);
+                var result = await OnPostRefreshImagesAsync(Product.Id);
                 return result;
             }
             catch (Exception ex)
@@ -92,10 +92,20 @@ namespace CompletKitInstall.Pages
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
             var prodId = _productImageRepo.GetById(id).Result.ProductId;
+            var ctlImagePath = _productImageRepo.GetById(id).Result.ImageUrl;
+
             try
             {
                 await _productImageRepo.RemoveById(id, User);
-                var result = await RefreshImages(prodId);
+                var ctlImg = new FileInfo(Path.Combine(_webHostEnvironment.WebRootPath, ctlImagePath));
+                ctlImg.Refresh();
+                if (ctlImg.Exists)
+                {
+                    ctlImg.Delete();
+                    _logger.LogInformation($"File Deleted {ctlImg.Name}");
+                }
+
+                var result = await OnPostRefreshImagesAsync(prodId);
                 return result;
 
             }
@@ -106,13 +116,16 @@ namespace CompletKitInstall.Pages
                 throw ex;
             }
         }
-        public async Task<IActionResult> RefreshImages(int id)
+        public async Task<IActionResult> OnPostRefreshImagesAsync(int id)
         {
-            return new PartialViewResult
+
+            var productImages = await _productImageRepo.GetByProductId(id);
+            var result = new PartialViewResult
             {
                 ViewName = "~/Pages/Partials/_ProductImagesCardGroup.cshtml",
-                ViewData = new ViewDataDictionary<List<ProductImageViewModel>>(ViewData, await _productImageRepo.GetByProductId(id)),
+                ViewData = new ViewDataDictionary<List<ProductImageViewModel>>(ViewData, productImages),
             };
+            return result;
         }
     }
 }

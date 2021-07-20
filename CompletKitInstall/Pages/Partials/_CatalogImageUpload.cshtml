@@ -2,19 +2,20 @@
 @model IFormFileCollection
 @{
 }
-<form method="post" data-ajax="true" data-ajax-method="post">
-    <div class="card-body">
-        <h3>Edit Product Images</h3>
-        <input asp-for="@Model" multiple="multiple" id="ctl_images" name="upload_file" class="form-control" onchange="preview_image();" />
+<div id="UploadImages">
+    <form asp-page-handler="RefreshImages" id="imageUploadForm" method="post" data-ajax="true" data-ajax-method="post" data-ajax-update="#ProductImages">
+        <div class="card-body">
+            <h3>Edit Product Images</h3>
+            <input asp-for="@Model" multiple="multiple" id="ctl_images" name="upload_file" class="form-control" onchange="preview_image();" />
+        </div>
+        <button class="btn btn-sm btn-primary d-none d-md-inline-block" type="submit" id="AddImages" onclick="clickbtn();">
+            Add
+        </button>
+    </form>
+    <div id="image_preview">
+
     </div>
-    <button class="btn btn-sm btn-primary d-none d-md-inline-block" type="submit" id="AddImages" onclick="clickbtn();">
-        Add
-    </button>
-</form>
-<div id="image_preview">
-
 </div>
-
 
 <script>
 
@@ -51,25 +52,20 @@
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            success: function (repo) {
-                if (repo.status == "success") {
-                    alert("File : " + repo.filename + " is uploaded successfully");
-                }
+            success: function (response) {
+                document.getElementById("imageUploadForm").reset();
+                var prv = document.getElementById("image_preview");
+                prv.innerHTML = "";
+                $('#ProductImages').html(response);
+                //if (repo.status == "success") {
+                //    alert("File : " + repo.filename + " is uploaded successfully");
+                //}
             },
             error: function () {
                 alert("Error occurs");
             },
         });
-        //jQuery.ajax({
-        //    url: window.location.pathname + "?handler=RefreshImages",    
-        //    type: "POST",
-        //    datatype: "HTML",
-        //    beforeSend: function (xhr) {
-        //        xhr.setRequestHeader("XSRF-TOKEN",
-        //            $('input:hidden[name="__RequestVerificationToken"]').val());
-        //    },
-        //    success: alert("done"),  
-        //});
     }
-
 </script>
+
+               
