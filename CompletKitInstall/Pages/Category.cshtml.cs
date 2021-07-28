@@ -49,5 +49,10 @@ namespace CompletKitInstall.Pages
             Categories = Categories.OrderByDescending(x => x.DateCreated);
             return Page();
         }
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            await _categoryRepo.RemoveById(id,User);
+            return RedirectToPage("/Category");
+        }
     }
 }

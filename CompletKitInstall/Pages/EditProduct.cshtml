@@ -15,18 +15,26 @@
         <div class="rounded-2 card col-md-6 my-1">
             <div class="card-body">
                 <h3>Edit Product</h3>
-                <div class="row">
-                    <input class="col-5" type="text" asp-for="Product.Name" />
-                    <span asp-validation-for="Product.Name"></span>
-                </div>
-                <div class="row">
-                    <textarea rows="10" asp-for="Product.Description"></textarea>
-                    <span asp-validation-for="Product.Description"></span>
-                </div>
-                <div class="row">
-                    <input type="file" asp-for="Image" class="form-control" />
-                    <span asp-validation-for="Image" />
-                </div>
+                <form method="post" enctype="multipart/form-data" asp-page-handler="Edit">
+                    <div class="row">
+                        <input class="col-5" type="text" asp-for="Product.Name" />
+                        <span asp-validation-for="Product.Name"></span>
+                    </div>
+                    <div class="row">
+                        <textarea rows="10" asp-for="Product.Description"></textarea>
+                        <span asp-validation-for="Product.Description"></span>
+                    </div>
+                    <div class="row">
+                        <input id="prodImage" type="file" asp-for="Image" class="form-control" onchange="preview_prodimage();" />
+                        <span asp-validation-for="Image" />
+                    </div>
+                    <div class="row" id="prodImagePreview">
+
+                    </div>
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary col-2" value="Edit"> Edit </button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="rounded-2 card col-md-6 my-1">

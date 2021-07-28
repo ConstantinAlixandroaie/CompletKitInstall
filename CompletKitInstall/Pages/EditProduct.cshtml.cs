@@ -48,8 +48,38 @@ namespace CompletKitInstall.Pages
         {
             if (!ModelState.IsValid)
                 return Page();
+            var pathImg = Path.Combine(_webHostEnvironment.WebRootPath, "Images/Products");
+            if (!Directory.Exists(pathImg))
+            {
+                Directory.CreateDirectory(pathImg);
+            }
+
+            if (Image.Length > 0)
+                try
+                {
+                    var uniqueFileName = string.Concat(Guid.NewGuid().ToString(), Image.FileName);
+                    using var fileStream = new FileStream(Path.Combine(pathImg, uniqueFileName), FileMode.Create);
+                    //delete old product image
+                    var imgPath = _productRepo.GetById(id).Result.ImageUrl;
+                    var prodImg = new FileInfo(Path.Combine(_webHostEnvironment.WebRootPath, imgPath));
+                    prodImg.Refresh();
+                    if (prodImg.Exists)
+                    {
+                        prodImg.Delete();
+                        _logger.LogInformation($"File Deleted {prodImg.Name}");
+                    }
+                    Product.ImageUrl = Path.Combine("Images/Products", uniqueFileName);
+                    await Image.CopyToAsync(fileStream);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    throw ex;
+                }
+
             await _productRepo.Update(id, Product, User);
-            return RedirectToPage($"/Product/{id}");
+            var result = await OnGetAsync(id);
+            return result;
         }
         public async Task<IActionResult> OnPostAddImagesAsync()
         {
