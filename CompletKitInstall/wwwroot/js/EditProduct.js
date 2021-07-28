@@ -9,7 +9,9 @@ function preview_image() {
             + "<br/><button class=\"btn-close\" aria-label='Close'></button>" + "</span>");
         $('.btn-close').click(function () {
             $(this).parent(".pip").remove();
-            $('#previmg' + i).click(function () { (this).remove(); });
+            $('#previmg' + i).click(function () {
+                (this).remove();
+            });
         });
     }
 }
@@ -23,7 +25,9 @@ function preview_prodimage() {
             + "<br/><button class=\"btn-close\" aria-label='Close'></button>" + "</span>");
         $('.btn-close').click(function () {
             $(this).parent(".pip").remove();
-            $('#previmg' + i).click(function () { (this).remove(); });
+            $('#previmg' + i).click(function () {
+                (this).remove();
+            });
         });
     }
 }
