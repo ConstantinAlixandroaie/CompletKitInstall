@@ -60,7 +60,7 @@ namespace CompletKitInstall.Pages
                     var uniqueFileName = string.Concat(Guid.NewGuid().ToString(), Image.FileName);
                     using var fileStream = new FileStream(Path.Combine(pathImg, uniqueFileName), FileMode.Create);
                     //delete old product image
-                    var imgPath = _productRepo.GetById(id).Result.ImageUrl;
+                    var imgPath =  _productRepo.GetById(id).Result.ImageUrl;
                     var prodImg = new FileInfo(Path.Combine(_webHostEnvironment.WebRootPath, imgPath));
                     prodImg.Refresh();
                     if (prodImg.Exists)
