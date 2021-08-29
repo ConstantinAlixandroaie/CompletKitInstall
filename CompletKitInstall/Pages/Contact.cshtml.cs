@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using CompletKitInstall.Areas.Identity.Services;
@@ -17,10 +18,13 @@ namespace CompletKitInstall.Pages
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         [BindProperty]
+        [Required]
         public string UserEmail { get; set; }
         [BindProperty]
+        [Required]
         public string EmailBody { get; set; }
         [BindProperty]
+        [Required]
         public string EmailSubject { get; set; }
 
         public ContactModel(IMailer emailSender,SignInManager<IdentityUser> signInManager,UserManager<IdentityUser> userManager)
@@ -36,6 +40,12 @@ namespace CompletKitInstall.Pages
             return Page();
         }
 
+        public async Task<IActionResult> OnPostAsync()
+        {
+            EmailBody = EmailBody + "/n" + $"This Email was sent to you from {UserEmail}.";
+            await _emailSender.SendMailAsync("constantin.alixandroaie@gmail.com", EmailSubject,EmailBody);
+            return RedirectToPage("/Contact");
+        }
 
     }
 }
