@@ -13,74 +13,75 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow w-100">
-            <div class="container">
-                <a class="img-wrap navbar-brand " asp-page="/Index">
-                    <img src="~/Images/Logo.png" class="img-thumbnail navbar-brand h-50" />
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-dark border-bottom box-shadow w-100">
+            <div class="container container-fluid">
+                <a class="navbar-brand " asp-page="/Index">
+                    <h2>Complet<em>Kit</em>Install</h2>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
 
-                    @if (!SignInManager.IsSignedIn(User))
-                    {
+                @if (!SignInManager.IsSignedIn(User))
+                {
 
+                    <div class="collapse navbar-collapse" id="myNavbar">
                         <environment include="Development,Release" exclude="Pre-Release">
-                            <ul class="navbar-nav flex-grow-1">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/Index">Home</a>
+                                    <a class="nav-link text-light" href="/Index">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/Product">Product</a>
+                                    <a class="nav-link text-light" href="/Product">Product</a>
                                 </li>
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                    <li class="btn-group">
-                                        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <li class="nav-link btn-group">
+                                        <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             Administrare
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="/Category">Category</a></li>
                                             <li><a class="dropdown-item" href="/AddProduct">Create Product</a></li>
-                                            <li><a class="dropdown-item" href="/EditProduct" hidden="hidden">Update Product</a></li>
                                             <li><hr class="dropdown-divider" hidden="hidden"></li>
-                                            <li><a class="dropdown-item" href="#" hidden="hidden">Separated link</a></li>
                                         </ul>
                                     </li>
                                 }
                             </ul>
                         </environment>
-                    }
-                    else
-                    {
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Product">Product</a>
-                            </li>
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="btn-group">
-                                    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Administrare
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="/Category">Category</a></li>
-                                        <li><a class="dropdown-item" href="/AddProduct">Create Product</a></li>
-                                        <li><a class="dropdown-item" href="/EditProduct" hidden="hidden">Update Product</a></li>
-                                        <li><hr class="dropdown-divider" hidden="hidden"></li>
-                                        <li><a class="dropdown-item" href="#" hidden="hidden">Separated link</a></li>
-                                    </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+
+                }
+                else
+                {
+                    <environment include="Pre-Release">
+                        <div class="collapse navbar-collapse" id="myNavbar">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" href="/Index">Home</a>
                                 </li>
-                            }
-                        </ul>
-                    }
-                </div>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" href="/Product">Product</a>
+                                </li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li class="nav-link btn-group">
+                                        <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Administrare
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="/Category">Category</a></li>
+                                            <li><a class="dropdown-item" href="/AddProduct">Create Product</a></li>
+                                            <li><hr class="dropdown-divider" hidden="hidden"></li>
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </environment>
+                }
             </div>
         </nav>
     </header>
@@ -91,7 +92,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted bg-dark">
         <div class="container">
             &copy; 2021 - Created by Constantin Alixandroaie - <a href="/Privacy">Privacy</a>
         </div>

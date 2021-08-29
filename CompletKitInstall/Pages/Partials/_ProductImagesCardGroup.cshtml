@@ -29,15 +29,13 @@ else
             <div class="col my-1">
                 <div class="card prodcard h-100">
                     <img class="card-img-top rounded" src="~/@item.ImageUrl" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body"></div>
+                    <div class="card-footer">
                         <form asp-page-handler="delete" asp-route-id="@item.Id" method="post" data-ajax="true" data-ajax-update="#ProductImages">
                             <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
                                 Delete
                             </button>
                         </form>
-                    </div>
-                    <div class="card-footer">
-
                     </div>
                 </div>
             </div>

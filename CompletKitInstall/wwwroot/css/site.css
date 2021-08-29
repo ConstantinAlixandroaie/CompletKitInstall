@@ -331,3 +331,52 @@ body {
 .login100-pic {
     width: 35%;
 }
+.navbar .navbar-brand h2 em {
+    font-style: normal;
+    color: #f33f3f;
+}
+.banner .text-content h2 {
+    font-size: 36px;
+    letter-spacing: 0.5px;
+}
+.banner .text-content h2 {
+    font-size: 36px;
+    letter-spacing: 0.5px;
+}
+.carousel-caption h2 {
+    color: #6971d1;
+    font-size: 62px;
+    font-weight:bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+.navbar .navbar-brand h2 {
+    color: #e5e5e5;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 700;
+    -webkit-transition: all .3s ease 0s;
+    -moz-transition: all .3s ease 0s;
+    -o-transition: all .3s ease 0s;
+    transition: all .3s ease 0s;
+}
+.section-heading h2 {
+    font-size: 28px;
+    font-weight: 400;
+    color: #1e1e1e;
+    margin-bottom: 15px;
+}
+.page-heading .text-content h2 {
+    color: #fff;
+    font-size: 62px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+.background-header .navbar-brand h2 {
+    color: #121212 !important;
+}
+
+.my-carousel-description {
+    color: #670303;
+    font-weight:bold;
+}

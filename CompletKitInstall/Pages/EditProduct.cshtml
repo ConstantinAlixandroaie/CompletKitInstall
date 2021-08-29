@@ -12,16 +12,16 @@
         </div>
     </div>
     <div class="row">
-        <div class="rounded-2 card col-md-6 my-1">
+        <div class="rounded-2 card col-5 my-1 me-1">
             <div class="card-body">
                 <h3>Edit Product</h3>
                 <form method="post" enctype="multipart/form-data" asp-page-handler="Edit">
                     <div class="row">
-                        <input class="col-5" type="text" asp-for="Product.Name" />
+                        <input class="form-control" type="text" asp-for="Product.Name" />
                         <span asp-validation-for="Product.Name"></span>
                     </div>
                     <div class="row">
-                        <textarea rows="10" asp-for="Product.Description"></textarea>
+                        <textarea class="form-control" rows="15" asp-for="Product.Description"></textarea>
                         <span asp-validation-for="Product.Description"></span>
                     </div>
                     <div class="row">
@@ -37,7 +37,7 @@
                 </form>
             </div>
         </div>
-        <div class="rounded-2 card col-md-6 my-1">
+        <div class="rounded-2 card col-5 my-1 ms-1">
             <div class="card-body">
                 <partial name="Partials/_CatalogImageUpload.cshtml" model="@Model.CatalogImages"/> 
             </div>

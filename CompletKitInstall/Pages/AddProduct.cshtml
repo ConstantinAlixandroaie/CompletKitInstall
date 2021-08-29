@@ -2,107 +2,122 @@
 @model CompletKitInstall.Pages.AddProductModel
 @{
 }
-<form method="post" class="col-sm-12" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <div class="col-sm-12">
-            <label>Name</label>
-            <span></span>
-        </div>
-        <div class="col-sm-12">
-            <input class="col" asp-for="Product.Name" />
-            <span asp-validation-for="Product.Name" class="text-danger"></span>
-        </div>
-        <div class="col-sm-12">
-            <label>Description</label>
-        </div>
-        <div class="col-sm-12">
-            <textarea cols="160" rows="5" asp-for="Product.Description"></textarea>
-            <span asp-validation-for="Product.Description" class="text-danger"></span>
-        </div>
-        <div class="col-sm-12 ">
-            <label>Image</label>
-        </div>
-        <div class="col-sm-12">
-            <input type="file" asp-for="Image" />
-            <span asp-validation-for="Image" class="text-danger"></span>
-        </div>
-        <div class="col-sm-12">
-            <label>Categories</label>
-        </div>
-        <div>
-            <select asp-for="Product.CategoryId">
-                <option value="">Choose Category</option>
-                @foreach (var category in @Model.Categories)
-                {
-                    <option value="@category.Id.ToString()">@category.Name.ToString()</option>
-                }
-            </select>
-            <span asp-validation-for="Product.CategoryId"></span>
-        </div>
-        <div class="col-sm-12 ">
-            <label>Catalog Images</label>
-        </div>
-        <div class="col-sm-12">
-            <input type="file" multiple="multiple" id="ctl_images" asp-for="CatalogImages" onchange="preview_image();" />
-            <span asp-validation-for="CatalogImages" class="text-danger"></span>
-        </div>
-        <div id="image_preview">
+<div class="container mb-1">
+    <h2>Create Product</h2>
+    <form method="post" class="col-sm-12" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card col-10 shadow">
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label>Name</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <input class="form-control" asp-for="Product.Name" />
+                        <span asp-validation-for="Product.Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Description</label>
+                    </div>
+                    <div>
+                        <textarea class="form-control" rows="5" asp-for="Product.Description"></textarea>
+                        <span asp-validation-for="Product.Description" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-12 ">
+                        <label>Image</label>
+                    </div>
+                    <div>
+                        <input class="form-control" type="file" asp-for="Image" id="prod_image" onchange="preview_prodimage();" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <div id="prodimage_preview">
 
-        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Categories</label>
+                    </div>
+                    <div>
+                        <select class="form-control" asp-for="Product.CategoryId">
+                            <option value="">Choose Category</option>
+                            @foreach (var category in @Model.Categories)
+                            {
+                                <option value="@category.Id.ToString()">@category.Name.ToString()</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Product.CategoryId"></span>
+                    </div>
+                    <div class="col-sm-12 ">
+                        <label>Catalog Images</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <input class="form-control" type="file" multiple="multiple" id="ctl_images" asp-for="CatalogImages" onchange="preview_image();" />
+                        <span asp-validation-for="CatalogImages" class="text-danger"></span>
+                    </div>
+                    <div id="image_preview">
 
-        <div class="col-sm-12 ">
-            <button type="submit" class="btn-primary" value="Add"> Add </button>
+                    </div>
+
+                    <div class="col-sm-12 ">
+                        <button type="submit" class="btn-primary" value="Add"> Add </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</form>
-<form method="post" enctype="multipart/form-data">
-    <div class="row">
-        <div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Product.Id)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Product.Name)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Product.Description)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Product.DateCreated)
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Products)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Id)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td class="text-truncate" style="max-width: 100px;">
-                                @Html.DisplayFor(modelItem => item.Description)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
-                            <td>
-                                <a class="btn btn-outline-secondary" href="/Product/@item.Id">Details</a>
-                                <a class="btn btn-outline-primary" href="/Editproduct/@item.Id">Edit</a>
-                                <button type="submit" asp-page-handler="delete" asp-route-id="@item.Id" class="btn btn-outline-danger" onclick="this.blur();">Delete</button>
-                            </td>
+    </form>
+</div>
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>
+                                @Html.DisplayNameFor(model => model.Product.Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Product.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Product.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Product.DateCreated)
+                            </th>
+                            <th>
+                                Controls
+                            </th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="text-truncate" style="max-width: 100px;">
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-secondary" href="/Product/@item.Id">Details</a>
+                                    <a class="btn btn-outline-primary" href="/Editproduct/@item.Id">Edit</a>
+                                    <button type="submit" asp-page-handler="delete" asp-route-id="@item.Id" class="btn btn-outline-danger" onclick="this.blur();">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
 
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 <script src="~/js/AddProduct.js"></script>

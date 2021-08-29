@@ -5,7 +5,7 @@
 <div id="UploadImages">
     <form asp-page-handler="RefreshImages" id="imageUploadForm" method="post" data-ajax="true" data-ajax-method="post" data-ajax-update="#ProductImages">
         <div class="card-body">
-            <h3>Edit Product Images</h3>
+            <h3>Add New Catalog Images</h3>
             <input asp-for="@Model" multiple="multiple" id="ctl_images" name="upload_file" class="form-control" onchange="preview_image();" />
         </div>
         <button class="btn btn-sm btn-primary d-none d-md-inline-block" type="submit" id="AddImages" onclick="clickbtn();">
