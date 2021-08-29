@@ -43,7 +43,7 @@ namespace CompletKitInstall.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             var destEmail = "moisaandrei@gmail.com";
-            EmailBody = EmailBody + "/n" + $"This Email was sent to you from {UserEmail}.";
+            EmailBody = EmailBody + "\n" + $"This Email was sent to you from {UserEmail}.";
             await _emailSender.SendMailAsync(destEmail, EmailSubject,EmailBody);
             return RedirectToPage("/Contact");
         }
