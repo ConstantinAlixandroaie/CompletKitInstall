@@ -3,25 +3,44 @@
 @{
 }
 <div class="container">
+        <div>
+            <div>
+                <h2>Complet Kit Install</h2>
+                <div class=" card col-3">
+                    <div class="card-header fs-3">Moisa Andrei
+                    </div>
+                    <div class="card-body">
+                        <p class="text-danger">
+                            Administrator
+                        </p>
+                        <label class="fw-bold">Telefon:</label>
+                        <label>074316260</label>
+                        <br />
+                        <label class="fw-bold">E-mail:s</label>
+                        <label class="link-primary">office.cki@yahoo.com</label>
+                    </div>
+                </div>
+            </div>
+        </div>
     <h2> Formular de contact </h2>
-    <div class="card">
+    <div class="card col-6">
         <form class="m-2" method="post">
             <div>
-                <label>Email</label>
+                <label>Email*</label>
             </div>
             <div class="m-2">
                 <input class="form-control" asp-for="UserEmail" />
                 <span asp-validation-for="UserEmail" class="text-danger"></span>
             </div>
             <div>
-                <label>Subiect</label>
+                <label>Subiect*</label>
             </div>
             <div class="m-2">
                 <input class="form-control" asp-for="EmailSubject" />
                 <span asp-validation-for="EmailSubject" class="text-danger"></span>
             </div>
             <div>
-                <label>Mesaj</label>
+                <label>Mesaj*</label>
             </div>
             <div class="m-2">
                 <textarea rows="10" class="form-control" asp-for="EmailBody"></textarea>

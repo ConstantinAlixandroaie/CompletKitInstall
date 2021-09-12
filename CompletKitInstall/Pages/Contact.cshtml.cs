@@ -36,16 +36,23 @@ namespace CompletKitInstall.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await Task.CompletedTask;
+            //await Task.CompletedTask;
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var destEmail = "moisaandrei@gmail.com";
-            EmailBody = EmailBody + "\n" + $"This Email was sent to you from {UserEmail}.";
-            await _emailSender.SendMailAsync(destEmail, EmailSubject,EmailBody);
-            return RedirectToPage("/Contact");
+            if (!ModelState.IsValid)
+                return Page();
+            else
+            {
+                var destEmail = "office.cki@yahoo.com";
+                EmailBody = EmailBody + "\n" + $"This Email was sent to you from {UserEmail}.";
+                await _emailSender.SendMailAsync(destEmail, EmailSubject, EmailBody);
+                return RedirectToPage("/Contact");
+            }
+            
+
         }
 
     }
