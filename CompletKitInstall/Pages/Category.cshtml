@@ -4,31 +4,37 @@
     ViewData["Title"] = "Category";
 }
 
-<form method="post" class="col-sm-12">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <div class="col-sm-12">
-            <label>Name</label>
-            <span></span>
+<div class="container mb-1">
+    <h2>Add Category</h2>
+    <form method="post" class="col-sm-12">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card col-10 shadow">
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label>Name</label>
+                        <span></span>
+                    </div>
+                    <div class="col-sm-12">
+                        <input class="form-control" asp-for="Category.Name" />
+                        <span asp-validation-for="Category.Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Description</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <textarea class="form-control" rows="5" asp-for="Category.Description"></textarea>
+                        <span asp-validation-for="Category.Description" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-12 ">
+                        <input type="submit" value="Add" />
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-12">
-            <input class="col" asp-for="Category.Name" />
-            <span asp-validation-for="Category.Name" class="text-danger"></span>
-        </div>
-        <div class="col-sm-12">
-            <label>Description</label>
-        </div>
-        <div class="col-sm-12">
-            <textarea cols="60" rows="5" asp-for="Category.Description"></textarea>
-            <span asp-validation-for="Category.Description" class="text-danger"></span>
-        </div>
-        <div class="col-sm-12 ">
-            <input type="submit" value="Add" />
-        </div>
-    </div>
-</form>
-
-<div>
+    </form>
+</div>
+<div class="container">
     <table class="table">
         <thead>
             <tr>
@@ -40,6 +46,9 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Category.Description)
+                </th>
+                <th>
+                    Controls
                 </th>
             </tr>
         </thead>
