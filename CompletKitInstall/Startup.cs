@@ -36,9 +36,17 @@ namespace CompletKitInstall
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<CompletKitDbContext>(options =>
+            //  options.UseSqlServer(
+            //Configuration.GetConnectionString("LocalMariaDB")));
+            // Configuration.GetConnectionString("ReleaseConnection")));
+            //Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<CompletKitDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                //options.UseMySql(Configuration.GetConnectionString("LocalMariaDB"),ServerVersion.AutoDetect(Configuration.GetConnectionString("LocalMariaDB"))));
+                options.UseMySql(Configuration.GetConnectionString("ReleaseConnection"), ServerVersion.AutoDetect(Configuration.GetConnectionString("ReleaseConnection"))));
+            //Configuration.GetConnectionString("LocalMariaDB")));
+            //Configuration.GetConnectionString("ReleaseConnection")));
+            //Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<CompletKitDbContext>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
@@ -86,7 +94,7 @@ namespace CompletKitInstall
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IMailer, Mailer>();
 
-            
+
             services.AddHttpClient();
 
 
