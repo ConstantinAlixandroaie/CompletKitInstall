@@ -11,6 +11,7 @@ namespace CompletKitInstall.Models
         public string ImageUrl { get; set; }
         public string Title { get; set; }
         public string SubTitle { get; set; }
+        public bool Display { get; set; }
 
         public IDbObject MakeNew()
         {
@@ -19,6 +20,7 @@ namespace CompletKitInstall.Models
                 ImageUrl = ImageUrl,
                 Title = Title,
                 SubTitle = SubTitle,
+                Display=Display
             };
         }
 

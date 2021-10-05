@@ -11,6 +11,7 @@ namespace CompletKitInstall.Models
         public string ImageUrl { get; set; }
         public string CardText { get; set; }
         public string CardFooter { get; set; }
+        public bool Display { get; set; }
 
         public IDbObject MakeNew()
         {
@@ -19,6 +20,7 @@ namespace CompletKitInstall.Models
                 ImageUrl = ImageUrl,
                 CardText = CardText,
                 CardFooter = CardFooter,
+                Display=Display
             };
         }
 
