@@ -53,29 +53,29 @@ namespace CompletKitInstall.Pages
             {
                 Directory.CreateDirectory(pathImg);
             }
-
-            if (Image.Length > 0)
-                try
-                {
-                    var uniqueFileName = string.Concat(Guid.NewGuid().ToString(), Image.FileName);
-                    using var fileStream = new FileStream(Path.Combine(pathImg, uniqueFileName), FileMode.Create);
-                    //delete old product image
-                    var imgPath =  _productRepo.GetById(id).Result.ImageUrl;
-                    var prodImg = new FileInfo(Path.Combine(_webHostEnvironment.WebRootPath, imgPath));
-                    prodImg.Refresh();
-                    if (prodImg.Exists)
+            if (Image != null)
+                if (Image.Length > 0)
+                    try
                     {
-                        prodImg.Delete();
-                        _logger.LogInformation($"File Deleted {prodImg.Name}");
+                        var uniqueFileName = string.Concat(Guid.NewGuid().ToString(), Image.FileName);
+                        using var fileStream = new FileStream(Path.Combine(pathImg, uniqueFileName), FileMode.Create);
+                        //delete old product image
+                        var imgPath = _productRepo.GetById(id).Result.ImageUrl;
+                        var prodImg = new FileInfo(Path.Combine(_webHostEnvironment.WebRootPath, imgPath));
+                        prodImg.Refresh();
+                        if (prodImg.Exists)
+                        {
+                            prodImg.Delete();
+                            _logger.LogInformation($"File Deleted {prodImg.Name}");
+                        }
+                        Product.ImageUrl = Path.Combine("Images/Products", uniqueFileName);
+                        await Image.CopyToAsync(fileStream);
                     }
-                    Product.ImageUrl = Path.Combine("Images/Products", uniqueFileName);
-                    await Image.CopyToAsync(fileStream);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message);
-                    throw ex;
-                }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message);
+                    }
+
 
             await _productRepo.Update(id, Product, User);
             var result = await OnGetAsync(id);
