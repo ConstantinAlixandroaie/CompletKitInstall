@@ -22,11 +22,10 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                @if (!SignInManager.IsSignedIn(User))
-                {
+                @*@if (!SignInManager.IsSignedIn(User))
+                {*@
 
                     <div class="collapse navbar-collapse" id="myNavbar">
-                        <environment include="Development,Release" exclude="Pre-Release">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
                                     <a class="nav-link text-light" href="/Index">Home</a>
@@ -51,14 +50,11 @@
                                     </li>
                                 }
                             </ul>
-                        </environment>
                         <partial name="_LoginPartial" />
                     </div>
-
-                }
-                else
+                @*}*@
+                @*else
                 {
-                    <environment include="Pre-Release">
                         <div class="collapse navbar-collapse" id="myNavbar">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
@@ -86,8 +82,7 @@
                             </ul>
                             <partial name="_LoginPartial" />
                         </div>
-                    </environment>
-                }
+                }*@
             </div>
         </nav>
     </header>

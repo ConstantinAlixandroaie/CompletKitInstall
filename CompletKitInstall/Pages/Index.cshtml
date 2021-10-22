@@ -4,156 +4,132 @@
     ViewData["Title"] = "Home";
 }
 
-@if (!Model.UserIsSignedIn)
-{
-    <environment include="Development,Release" exclude="Pre-Release">
-        <div id="carosuelHomePage" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="2"></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img class="d-block w-100 " src="~/Images/fittings.jpg" alt="First slide" />
-                    <div class="carousel-caption my-carousel-caption d-none d-md-block ">
-                        <div class="row d-flex flex-column bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <h2 class="float-start">Calitate Industriala</h2>
-                            </div>
-                        </div>
-                        <div class="row d-flex flex-column bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <p class="float-start my-carousel-description">
-                                    Intrumente si echipamente la standard industrial!
-                                </p>
-                            </div>
+    <div id="carosuelHomePage" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#carosuelHomePage" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100 " src="~/Images/fittings.jpg" alt="First slide" />
+                <div class="carousel-caption my-carousel-caption d-none d-md-block ">
+                    <div class="row d-flex flex-column bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <h2 class="float-start">Calitate Industriala</h2>
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item ">
-                    <img class="d-block w-100 " src="~/Images/consulting.jpg" alt="Second slide" />
-                    <div class="carousel-caption my-carousel-caption d-none d-md-block ">
-                        <div class="row d-flex flex-column bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <h2 class="float-start">Consultanta</h2>
-                            </div>
-                        </div>
-                        <div class="row d-flex flex-column bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <p class="float-start my-carousel-description">
-                                    Echipa noastra e pregatita sa va raspunda la intrebari.Contactati-ne!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item ">
-                    <img class="d-block w-100 " src="~/Images/infrastructure-2809770_960_720.jpg" alt="Third slide" />
-                    <div class="carousel-caption my-carousel-caption d-none d-md-block ">
-                        <div class="row d-flex flex-column bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <h2 class="float-start">Disponibilitate crescuta</h2>
-                            </div>
-                        </div>
-                        <div class="row d-flex flex-column bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                                <p class="float-start my-carousel-description ">
-                                    Gama larga de produse prezentate si nu numai! Verificati oferta noastra!
-                                </p>
-                            </div>
+                    <div class="row d-flex flex-column bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <p class="float-start my-carousel-description">
+                                Intrumente si echipamente la standard industrial!
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <button type="button" class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-target="#carosuelHomePage" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button type="button" class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-target="#carosuelHomePage" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-
-        <div class="container">
-            <section class="mt-n12">
-                <div class="justify-content-center row row-cols-1 row-cols-md-3 g-4">
-                    <div class="col">
-                        <div class="card h-100 rounded">
-                            <img src="~/Images/electric-1080584_960_720.webp" class="card-img-top rounded" />
-                            <div class="card-body">
-                                <h5 class="card-title">Echipamente Electrice</h5><br />
-                                <p class="card-text">Oferim produse specifice pentru instalatii electrice.
-                                    Solutii casnice sau mai mult de atat.
-                                </p>
-                            </div>
-                            <div class="card-footer">
-                            </div>
+            <div class="carousel-item ">
+                <img class="d-block w-100 " src="~/Images/consulting.jpg" alt="Second slide" />
+                <div class="carousel-caption my-carousel-caption d-none d-md-block ">
+                    <div class="row d-flex flex-column bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <h2 class="float-start">Consultanta</h2>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="card h-100 rounded">
-                            <img src="~/Images/motor-2323171_960_720.jpg" class="card-img-top rounded" />
-                            <div class="card-body">
-                                <h5 class="card-title">Electropompe</h5><br />
-                                <p class="card-text">Pompe pentru instalatii mici
-                                de la acvarii la piscine. 
-                                </p>
-                                <p class="card-text">
-                                    Instrumente de testare a apei. Aditivi pentru curatarea apei.
-                                </p>
-                            </div>
-                            <div class="card-footer">
-                                @*<small class="text-muted">Last updated 3 mins ago</small>*@
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card h-100 rounded">
-                            <img src="~/Images/gears-2133620_960_720.webp" class="card-img-top rounded" />
-                            <div class="card-body">
-                                <h5 class="card-title">Etansari</h5><br />
-                                <p class="card-text">
-                                    Si alte auxiliare pentru pompe de recirculare si de dozare.
-                                </p>
-                                <p class="card-text">
-                                    Produsele noastre nu se limiteaza doar la ce gasiti pe site. <a href="/Contact">Contactati-ne</a> cu orice cerere particulara.
-                                </p>
-                            </div>
-                            <div class="card-footer">
-                                @*<small class="text-muted">Last updated 3 mins ago</small>*@
-                            </div>
+                    <div class="row d-flex flex-column bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <p class="float-start my-carousel-description">
+                                Echipa noastra e pregatita sa va raspunda la intrebari.Contactati-ne!
+                            </p>
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
-    </environment>
-    <environment include="Pre-Release">
-        <div style="position:relative">
-            <div class="overlay text-center">
-                <img class="rounded mx-auto d-block" src="~/Images/under-construction-2891888_960_720.jpg" />
-                <div class="row justify-content-center text-center">
-                    <div class="col-12 col-md-10 mt-5">
-
-                        <i class="fa fa-user fa-5x mb-5"></i>
-
-                        <h2>
-                            Site-ul nostru este in curs de dezvoltare!
-                        </h2>
-
-                        <p class="text-muted">
-                            Va asteptam in curand pe site-ul nostru.
-                        </p>
+            </div>
+            <div class="carousel-item ">
+                <img class="d-block w-100 " src="~/Images/infrastructure-2809770_960_720.jpg" alt="Third slide" />
+                <div class="carousel-caption my-carousel-caption d-none d-md-block ">
+                    <div class="row d-flex flex-column bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <h2 class="float-start">Disponibilitate crescuta</h2>
+                        </div>
+                    </div>
+                    <div class="row d-flex flex-column bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <p class="float-start my-carousel-description ">
+                                Gama larga de produse prezentate si nu numai! Verificati oferta noastra!
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </environment>
-}
-else
+
+        <button type="button" class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-target="#carosuelHomePage" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button type="button" class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-target="#carosuelHomePage" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <section class="mt-n12">
+            <div class="justify-content-center row row-cols-1 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="card h-100 rounded">
+                        <img src="~/Images/electric-1080584_960_720.webp" class="card-img-top rounded" />
+                        <div class="card-body">
+                            <h5 class="card-title">Echipamente Electrice</h5><br />
+                            <p class="card-text">
+                                Oferim produse specifice pentru instalatii electrice.
+                                Solutii casnice sau mai mult de atat.
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 rounded">
+                        <img src="~/Images/motor-2323171_960_720.jpg" class="card-img-top rounded" />
+                        <div class="card-body">
+                            <h5 class="card-title">Electropompe</h5><br />
+                            <p class="card-text">
+                                Pompe pentru instalatii mici
+                                de la acvarii la piscine.
+                            </p>
+                            <p class="card-text">
+                                Instrumente de testare a apei. Aditivi pentru curatarea apei.
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            @*<small class="text-muted">Last updated 3 mins ago</small>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 rounded">
+                        <img src="~/Images/gears-2133620_960_720.webp" class="card-img-top rounded" />
+                        <div class="card-body">
+                            <h5 class="card-title">Etansari</h5><br />
+                            <p class="card-text">
+                                Si alte auxiliare pentru pompe de recirculare si de dozare.
+                            </p>
+                            <p class="card-text">
+                                Produsele noastre nu se limiteaza doar la ce gasiti pe site. <a href="/Contact">Contactati-ne</a> cu orice cerere particulara.
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            @*<small class="text-muted">Last updated 3 mins ago</small>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+<!--else
 {
     <div id="carosuelHomePage" class="carousel slide " data-bs-ride="carousel" data-bs-interval="false">
         <div class="carousel-indicators">
@@ -254,10 +230,10 @@ else
                             <p class="card-text">
                                 Instrumente de testare a apei. Aditivi pentru curatarea apei.
                             </p>
-                    </div>
-                        <div class="card-footer">
-                            @*<small class="text-muted">Last updated 3 mins ago</small>*@
                         </div>
+                        <div class="card-footer">-->
+                            @*<small class="text-muted">Last updated 3 mins ago</small>*@
+                        <!--</div>
                     </div>
                 </div>
                 <div class="col">
@@ -272,31 +248,12 @@ else
                                 Produsele noastre nu se limiteaza doar la ce gasiti pe site. <a href="/Contact">Contactati-ne</a> cu orice cerere particulara.
                             </p>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer">-->
                             @*<small class="text-muted">Last updated 3 mins ago</small>*@
-                        </div>
+                        <!--</div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
-    <environment exclude="Pre-Release">
-        <div class="overlay text-center">
-            <img class="rounded mx-auto d-block" src="~/Images/under-construction-2891888_960_720.jpg" />
-            <div class="row justify-content-center text-center">
-                <div class="col-12 col-md-10 mt-5">
-
-                    <i class="fa fa-user fa-5x mb-5"></i>
-
-                    <h2>
-                        Site-ul nostru este in curs de dezvoltare!
-                    </h2>
-
-                    <p class="text-muted">
-                        Va asteptam in curand pe site-ul nostru.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </environment>
-}
+}-->

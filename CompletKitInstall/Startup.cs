@@ -36,14 +36,14 @@ namespace CompletKitInstall
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CompletKitDbContext>(options =>
-             options.UseSqlServer(
+            //services.AddDbContext<CompletKitDbContext>(options =>
+            //options.UseSqlServer(
             //Configuration.GetConnectionString("LocalMariaDB")));
             //Configuration.GetConnectionString("ReleaseConnection")));
-            Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddDbContext<CompletKitDbContext>(options =>
+            //Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<CompletKitDbContext>(options =>
                 //options.UseMySql(Configuration.GetConnectionString("LocalMariaDB"),ServerVersion.AutoDetect(Configuration.GetConnectionString("LocalMariaDB"))));
-               //options.UseMySql(Configuration.GetConnectionString("ReleaseConnection"), ServerVersion.AutoDetect(Configuration.GetConnectionString("ReleaseConnection"))));
+               options.UseMySql(Configuration.GetConnectionString("ReleaseConnection"), ServerVersion.AutoDetect(Configuration.GetConnectionString("ReleaseConnection"))));
             services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<CompletKitDbContext>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
